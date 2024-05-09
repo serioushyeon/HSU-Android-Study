@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 이미지 에서 끝부분을 둥글게 처리하는 로직 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/transparent" /> <!-- 배경색 투명 -->
+    <corners android:radius="16dp" /> <!-- 모서리 반경을 16dp로 설정 -->
+</shape>
