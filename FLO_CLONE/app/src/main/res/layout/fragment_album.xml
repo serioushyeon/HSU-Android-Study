@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.album.AlbumFragment">
+
+    <ImageButton
+        android:id="@+id/btn_arrow_black_ib"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/btn_arrow_black"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ic_btn_player_more_ib"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/btn_player_more"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ic_ic_my_like_off_ib"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_my_like_off"
+        app:layout_constraintEnd_toStartOf="@+id/ic_btn_player_more_ib"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/album_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IU 5th Album 'LILAC'"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginTop="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/singer_name_tv"
+        android:text="가수"
+        android:textSize="15dp"
+        android:textColor="#A9A9A9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album_title_tv" />
+    <TextView
+        android:id="@+id/album_info_tv"
+        android:text="2021.03.25 | 정규 | 댄스 팝"
+        android:textSize="15dp"
+        android:textColor="#A9A9A9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/singer_name_tv" />
+
+    <ImageView
+        android:id="@+id/img_album_exp_iv"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_album_exp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album_info_tv" />
+
+    <ImageView
+        android:id="@+id/img_album_lp_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/img_album_lp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_album_exp_iv"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toEndOf="@+id/img_album_exp_iv"
+        app:layout_constraintTop_toBottomOf="@+id/album_info_tv"
+        app:layout_constraintWidth_percent="0.1" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/album_content_tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="#3f3fff"
+        app:tabIndicatorColor="#3f3fff"
+        app:tabRippleColor="#00ff0000"
+
+        app:layout_constraintEnd_toEndOf="@+id/img_album_exp_iv"
+        app:layout_constraintStart_toStartOf="@+id/img_album_exp_iv"
+        app:layout_constraintTop_toBottomOf="@+id/img_album_exp_iv" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/album_content_vp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/album_content_tb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
