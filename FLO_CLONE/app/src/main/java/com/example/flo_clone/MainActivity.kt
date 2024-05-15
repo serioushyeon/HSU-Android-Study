@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeActivity() {
         val song = Song(binding.playerTitleTv.text.toString(), binding.playerSingerTv.text.toString(),
-            0, 60, false)
+            0, 60, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
             val intent = Intent(this, SongActivity::class.java)
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("second", song.second)
             intent.putExtra("playTime", song.playTime)
             intent.putExtra("isPlaying", song.isPlaying)
+            intent.putExtra("music", song.music)
             getResultText.launch(intent) // Song 액티비티를 시작하고 결과 처리 콜백 호출
         }
     }
