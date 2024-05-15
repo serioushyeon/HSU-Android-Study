@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeActivity() {
-        val song = Song(binding.playerTitleTv.text.toString(), binding.playerSingerTv.text.toString(),
+        val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
             0, 60, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
@@ -112,6 +112,8 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
+
 
     override fun onStart() {
         super.onStart()
