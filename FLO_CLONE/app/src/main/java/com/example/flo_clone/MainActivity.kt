@@ -130,6 +130,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             gson.fromJson(songJson, Song::class.java)
         }
+
+        setMiniPlayer(song)
     }
 
 }
