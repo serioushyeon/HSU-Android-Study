@@ -6,5 +6,7 @@ data class Song(
     val img: Int = 0,
     var second: Int = 0,
     var playTime: Int = 0,
-    var isPlaying: Boolean = false
+    var isPlaying: Boolean = false,
+    var music: String = "",
+    var isRepeating: Boolean = false
 )
