@@ -62,6 +62,7 @@ class SongActivity : AppCompatActivity() {
         timer.start()
     }
 
+    // 뒤로가기 버튼 쓰면 호출되는 함수
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -75,6 +76,8 @@ class SongActivity : AppCompatActivity() {
     }
 
     private fun setButton() {
+
+        // 재생/정지
         var isPlaying = true // 초기 상태 설정
         binding.nuguBtnDownIb.setOnClickListener{
             finish()
@@ -84,7 +87,8 @@ class SongActivity : AppCompatActivity() {
             setPlayerStatus(isPlaying) // 변경된 상태에 따라 이미지 변경
         }
 
-        var isRepeat = true
+        // 반복 재생
+        var isRepeat = false
         binding.nuguBtnRepeatInactiveIb.setOnClickListener{
             isRepeat = !isRepeat
             if (!isRepeat) {
@@ -94,10 +98,27 @@ class SongActivity : AppCompatActivity() {
                 val color = ContextCompat.getColor(this, R.color.blue)
                 binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
 
+                if (isPlaying || !isPlaying) {
+
+                    if (!isPlaying) {
+                        isPlaying = true
+                        binding.nuguBtnPlayIb.setImageResource(R.drawable.nugu_btn_pause_32)
+                    }
+
+                    // 스레드 종료 후 음악 정지
+                    timer.interrupt()
+                    mediaPlayer?.pause()
+                    mediaPlayer?.seekTo(0)
+
+                    // 스레드 생성 후 노래 실행
+                    startTimer()
+                    mediaPlayer?.start()
+                }
             }
         }
 
-        var isRandom = true
+        // 셔플
+        var isRandom = false
         binding.nuguBtnRandomInactiveIb.setOnClickListener{
             isRandom = !isRandom
             if (!isRandom) {
@@ -109,6 +130,7 @@ class SongActivity : AppCompatActivity() {
             }
         }
 
+        // 좋아요(찜하기)
         var isLike = true
         binding.songLikeIv.setOnClickListener{
             isLike = !isLike
@@ -119,6 +141,7 @@ class SongActivity : AppCompatActivity() {
             }
         }
 
+        // 블랙리스트?
         var isUnLike = true
         binding.songUnlikeIv.setOnClickListener{
             isUnLike = !isUnLike
@@ -130,6 +153,7 @@ class SongActivity : AppCompatActivity() {
         }
     }
 
+    // 재생/정지 버튼 클릭시 호출되는 함수 -> 클릭시 이미지 변경, 음악 재생 및 정지
     private fun setPlayerStatus(isPlaying: Boolean) {
         song.isPlaying = isPlaying
         timer.isPlaying = isPlaying
