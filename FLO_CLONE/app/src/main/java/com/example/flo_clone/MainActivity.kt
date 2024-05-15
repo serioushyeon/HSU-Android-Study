@@ -113,7 +113,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    private fun setMiniPlayer(song: Song) {
+        binding.mainMiniPlayerTitleTv.text = song.title
+        binding.mainMiniPlayerSingerTv.text = song.singer
+        binding.mainSongProgressSb.progress = (song.second * 100000) / song.playTime
+    }
 
     override fun onStart() {
         super.onStart()
