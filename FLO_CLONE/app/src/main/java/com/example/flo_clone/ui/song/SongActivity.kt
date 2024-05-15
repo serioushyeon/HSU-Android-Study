@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
 import com.example.flo_clone.databinding.ActivitySongBinding
@@ -86,20 +87,25 @@ class SongActivity : AppCompatActivity() {
         var isRepeat = true
         binding.nuguBtnRepeatInactiveIb.setOnClickListener{
             isRepeat = !isRepeat
-            if (isRepeat) {
-                binding.nuguBtnRepeatInactiveIb.setImageResource(R.drawable.nugu_btn_repeat_inactive)
+            if (!isRepeat) {
+                val color = ContextCompat.getColor(this, R.color.gray_color)
+                binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
             } else {
-                binding.nuguBtnRepeatInactiveIb.setImageResource(R.drawable.nugu_btn_play_32)
+                val color = ContextCompat.getColor(this, R.color.blue)
+                binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
+
             }
         }
 
         var isRandom = true
         binding.nuguBtnRandomInactiveIb.setOnClickListener{
             isRandom = !isRandom
-            if (isRandom) {
-                binding.nuguBtnRandomInactiveIb.setImageResource(R.drawable.nugu_btn_random_inactive)
+            if (!isRandom) {
+                val color = ContextCompat.getColor(this, R.color.gray_color)
+                binding.nuguBtnRandomInactiveIb.setColorFilter(color)
             } else {
-                binding.nuguBtnRandomInactiveIb.setImageResource(R.drawable.nugu_btn_play_32)
+                val color = ContextCompat.getColor(this, R.color.blue)
+                binding.nuguBtnRandomInactiveIb.setColorFilter(color)
             }
         }
 
