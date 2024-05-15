@@ -20,7 +20,7 @@
     <SeekBar
         android:id="@+id/main_song_progress_sb"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
         android:background="@null"
         android:max="100000"
         android:paddingStart="0dp"
