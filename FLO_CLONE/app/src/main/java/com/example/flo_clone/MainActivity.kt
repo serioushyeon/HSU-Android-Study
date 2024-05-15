@@ -14,9 +14,14 @@ import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
 import com.example.flo_clone.ui.song.Song
 import com.example.flo_clone.ui.song.SongActivity
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
+
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
+
+    private var song:Song = Song()
+    private var gson:Gson = Gson()
 
     companion object {
         const val STRING_INTENT_KEY = "my_string_key"
@@ -105,6 +110,19 @@ class MainActivity : AppCompatActivity() {
                 else -> false// when 문의 else
             }
 
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val songJson = sharedPreferences.getString("songData", null)
+
+        song = if(songJson == null) {
+            Song("라일락", "아이유(IU)", 0,60, false, "music_lilac")
+        } else {
+            gson.fromJson(songJson, Song::class.java)
         }
     }
 
