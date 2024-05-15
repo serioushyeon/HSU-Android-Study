@@ -66,4 +66,7 @@ dependencies {
     // Splash
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
+    //Gson
+    implementation ("com.google.code.gson:gson:2.10.1")
+
 }
