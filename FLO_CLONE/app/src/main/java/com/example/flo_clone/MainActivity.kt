@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeActivity() {
         val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
-            0, 60, false, "music_lilac")
+            0, 214, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
             val intent = Intent(this, SongActivity::class.java)
@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 미니 플레이어의 제목, 가수명, seekBar progress를 Song의 데이터로 설정하는 함수
     private fun setMiniPlayer(song: Song) {
         binding.mainMiniPlayerTitleTv.text = song.title
         binding.mainMiniPlayerSingerTv.text = song.singer
