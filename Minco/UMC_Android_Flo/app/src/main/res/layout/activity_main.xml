@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <!--바텀 네비뷰를 보이게 하려면 스크롤뷰로 하면 안보임..! -->
+
+    <!-- 0dp로 하는 이유는 유연하게 하기위해!-->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/main_play_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <SeekBar
+        android:id="@+id/main_miniplayer_progress_sb"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@null"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:progress="0"
+        android:layout_marginBottom="-4dp"
+        android:progressBackgroundTint="@color/song_player_bg"
+        android:progressTint="@color/song_player"
+        android:thumb="@color/transparent"
+        android:max="100000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/main_play_bar"  />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_play_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/main_bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#00F8FF"
+        android:paddingVertical="6dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="20dp"
+            >
+            <TextView
+            android:id="@+id/main_play_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내일의 우리"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/main_play_singer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="카더가든"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/main_prev_music_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/btn_miniplayer_previous" />
+
+            <ImageView
+                android:id="@+id/main_start_music_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/btn_miniplayer_play" />
+
+            <ImageView
+                android:id="@+id/main_next_music_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/btn_miniplayer_next" />
+
+
+            <ImageView
+                android:id="@+id/main_music_list_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginHorizontal="15dp"
+                android:src="@drawable/btn_miniplayer_go_list" />
+
+
+        </LinearLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_bottom_nav"
+            app:menu="@menu/bottom_nav_menu"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/white"
+            app:itemIconSize="25dp"
+            app:labelVisibilityMode="labeled"
+            app:itemIconTint="@drawable/btm_color_selector"
+            app:itemTextColor="@drawable/btm_color_selector"
+
+            />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
