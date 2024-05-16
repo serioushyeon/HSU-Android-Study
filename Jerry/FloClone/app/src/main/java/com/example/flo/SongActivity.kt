@@ -1,11 +1,13 @@
 package com.example.flo
 
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flo.databinding.ActivitySongBinding
+import com.google.gson.Gson
 import java.util.Timer
 
 class SongActivity : AppCompatActivity() {
@@ -13,6 +15,8 @@ class SongActivity : AppCompatActivity() {
     lateinit var binding : ActivitySongBinding
     lateinit var song: Song
     lateinit var timer: Timer
+    private var mediaPlayer: MediaPlayer? = null
+    private var gson: Gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +80,6 @@ class SongActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        timer.interrupt()
-    }
-
     private fun initSong(){
         if (intent.hasExtra("title")&&intent.hasExtra("singer")) {
             song = Song(
@@ -88,7 +87,8 @@ class SongActivity : AppCompatActivity() {
                 intent.getStringExtra("singer")!!,
                 intent.getIntExtra("second",0),
                 intent.getIntExtra("playTime", 0),
-                intent.getBooleanExtra("isPlaying", false)
+                intent.getBooleanExtra("isPlaying", false),
+                intent.getStringExtra("music")!!
             )
         }
         startTimer()
@@ -100,7 +100,8 @@ class SongActivity : AppCompatActivity() {
         binding.songStartTimeTv.text=String.format("%02d:%02d",song.second/60,song.second%60)
         binding.songEndTimeTv.text=String.format("%02d:%02d",song.playTime/60,song.playTime%60)
         binding.songProgressSb.progress=(song.second * 1000 / song.playTime)
-
+        val music = resources.getIdentifier(song.music, "raw", this.packageName)
+        mediaPlayer = MediaPlayer.create(this, music)
         setPlayerStatus(song.isPlaying)
     }
 
@@ -111,10 +112,14 @@ class SongActivity : AppCompatActivity() {
         if(isPlaying){
             binding.songPlayIv.visibility= View.GONE
             binding.songPauseIv.visibility = View.VISIBLE
+            mediaPlayer?.start()
         }
         else{
             binding.songPlayIv.visibility= View.VISIBLE
             binding.songPauseIv.visibility = View.GONE
+            if(mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+            }
         }
     }
 
@@ -179,5 +184,25 @@ class SongActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    // 사용자가 포커스를 잃었을 때 음악이 중지
+    override fun onPause() {
+        super.onPause()
+        setPlayerStatus(false)
+        song.second = ((binding.songProgressSb.progress * song.playTime)/100)/1000
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val editor = sharedPreferences.edit() // 에디터
+        val songJson = gson.toJson(song)
+        editor.putString("songData", songJson)
+
+        editor.apply()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.interrupt()
+        mediaPlayer?.release() // 미디어플레이어가 갖고 있던 리소스 해제
+        mediaPlayer = null // 미디어 플레이어 해제
     }
 }
