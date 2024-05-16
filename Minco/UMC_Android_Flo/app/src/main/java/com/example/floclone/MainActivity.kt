@@ -7,13 +7,16 @@ import android.util.Log
 //뷰바인딩을 위해 임포트 함수를 사용하기 위해?
 import com.example.floclone.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
     //lateinit은 나중에 초기화 될것을 나타냄
     // ActivityMainBinding은 레이아웃 파일이름에 Binding을 추가한이름
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
+    //전역변수
+    private var song:Song = Song()
+    private var gson: Gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(binding.root)
 
-        val song = Song(binding.mainPlayTitleTv.text.toString(),binding.mainPlaySingerTv.text.toString(),0,60,false)
+        //이제 필요없음 -> sharedPreferences로 값을 가져오기 때문
+        //val song = Song(binding.mainPlayTitleTv.text.toString(),binding.mainPlaySingerTv.text.toString(),0,60,false,"music_tomorow")
 
         binding.mainPlayBar.setOnClickListener {
             //어디로 갈지 설정
@@ -37,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("second",song.second)
             intent.putExtra("playTime",song.playTime)
             intent.putExtra("isPlaying",song.isPlaying)
+            intent.putExtra("music",song.music)
 
             startActivity(intent)
         }
@@ -85,4 +90,26 @@ class MainActivity : AppCompatActivity() {
             false
         }
     }
+
+    private fun setMiniPlayer(song: Song){
+        binding.mainPlayTitleTv.text = song.title
+        binding.mainPlaySingerTv.text = song.singer
+        binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
+    }
+
+    override fun onStart(){
+        super.onStart()
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val songJson = sharedPreferences.getString("songData",null)
+
+        song = if(songJson == null){
+            Song("내일의 우리","카더가든",0,60,false,"music_tomorow")
+        }else{
+            gson.fromJson(songJson,Song::class.java)
+        }
+        setMiniPlayer(song)
+
+    }
+
+
 }
