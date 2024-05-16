@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FLO_CLONE"
+rootProject.name = "FLO_clone"
 include(":app")
