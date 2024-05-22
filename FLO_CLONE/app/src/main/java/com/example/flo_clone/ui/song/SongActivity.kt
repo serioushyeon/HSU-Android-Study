@@ -94,26 +94,11 @@ class SongActivity : AppCompatActivity() {
             if (!isRepeat) {
                 val color = ContextCompat.getColor(this, R.color.gray_color)
                 binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
+                song.isRepeating = false
             } else {
                 val color = ContextCompat.getColor(this, R.color.blue)
                 binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
-
-                if (isPlaying || !isPlaying) {
-
-                    if (!isPlaying) {
-                        isPlaying = true
-                        binding.nuguBtnPlayIb.setImageResource(R.drawable.nugu_btn_pause_32)
-                    }
-
-                    // 스레드 종료 후 음악 정지
-                    timer.interrupt()
-                    mediaPlayer?.pause()
-                    mediaPlayer?.seekTo(0)
-
-                    // 스레드 생성 후 노래 실행
-                    startTimer()
-                    mediaPlayer?.start()
-                }
+                song.isRepeating = true
             }
         }
 
@@ -172,7 +157,7 @@ class SongActivity : AppCompatActivity() {
     inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
 
         private var second: Int = 0
-        private var mils: Float = 0f
+        private var mills: Float = 0f
 
         override fun run() {
             super.run()
@@ -181,17 +166,25 @@ class SongActivity : AppCompatActivity() {
                 while (true) {
 
                     if (second >= playTime) {
-                        break
+                        if (song.isRepeating) {
+                            mills = 0f
+                            second = 0
+                            mediaPlayer?.seekTo(0)
+                            mediaPlayer?.start()
+                        } else {
+                            mediaPlayer?.pause()
+                            break
+                        }
                     }
 
                     if (isPlaying) {
                         sleep(50)
-                        mils += 50
+                        mills += 50
 
                         runOnUiThread {
-                            binding.songProgressSb.progress = ((mils / playTime)*100).toInt()
+                            binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
                         }
-                        if (mils % 1000 == 0f) {
+                        if (mills % 1000 == 0f) {
                             runOnUiThread {
                                 binding.startTimerTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
                             }
