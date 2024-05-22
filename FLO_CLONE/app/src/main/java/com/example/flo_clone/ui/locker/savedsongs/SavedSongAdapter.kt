@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.flo_clone.data.savedSongs
+import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.ItemSavedSongBinding
 
-class SavedSongAdapter(val itemList: ArrayList<savedSongs>) :
+class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
     RecyclerView.Adapter<SavedSongAdapter.saveSongsViewHolder>() {
 
     private lateinit var mOnItemClickListener: OnItemClickListener
@@ -60,7 +60,7 @@ class SavedSongAdapter(val itemList: ArrayList<savedSongs>) :
             }
         }
 
-        fun bind(savedSong: savedSongs) {
+        fun bind(savedSong: SavedSongs) {
             // 이미지 로딩 라이브러리를 사용하여 이미지 설정
             Glide.with(itemView.context)
                 .load(savedSong.img)
