@@ -1,4 +1,7 @@
 package com.serioushyeon.floclone
 
-class MusicFile {
-}
+data class MusicFile(
+    var title: String? = "",
+    var singer: String? = "",
+    var coverImg: Int? = null,
+)

@@ -21,6 +21,9 @@ class SongActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initSong()
+        binding.songAlbumIv.setImageResource(song.img)
+        binding.songMusicTitleTv.text = song.title
+        binding.songSingerNameTv.text = song.singer
         setPlayer(song)
 
         binding.songDownIb.setOnClickListener{
@@ -66,6 +69,7 @@ class SongActivity : AppCompatActivity() {
         super.onPause()
         setPlayerStatus(false)
         song.second = ((binding.songProgressSb.progress * song.playTime)/100)/1000
+        //song.second = (mediaPlayer?.currentPosition ?: 0) / 1000 // Get current position in seconds
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit()   //에디터
         val songJson = gson.toJson(song)
@@ -135,7 +139,8 @@ class SongActivity : AppCompatActivity() {
                 intent.getBooleanExtra("isRepeating", false)
             )
         }
-        startTimer()
+        Log.d("", song.toString())
+        startTimer(song.second)
     }
 
     private fun setPlayer(song: Song){
@@ -145,9 +150,11 @@ class SongActivity : AppCompatActivity() {
         binding.songEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
         Log.d("Song", binding.songEndTimeTv.text.toString())
         Log.d("Song", song.playTime.toString())
-        binding.songProgressSb.progress = (song.second * 1000 / song.playTime)
+        binding.songProgressSb.max = (song.playTime * 1000)
+        binding.songProgressSb.progress = (song.second * 1000 / song.playTime) * 100
         val music = resources.getIdentifier(song.music, "raw", this.packageName)
         mediaPlayer = MediaPlayer.create(this, music)
+        mediaPlayer?.seekTo(song.second * 1000)
         setPlayerStatus(song.isPlaying)
     }
 
@@ -169,21 +176,21 @@ class SongActivity : AppCompatActivity() {
         }
     }
 
-    private fun startTimer(){
-        timer = Timer(song.playTime, song.isPlaying)
+    private fun startTimer(startSecond: Int){
+        timer = Timer(song.playTime, song.isPlaying, startSecond)
         timer.start()
     }
 
-    inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
-        private var second : Int = 0
-        private var mills: Float = 0f
+    inner class Timer(private val playTime: Int, var isPlaying: Boolean = true, startSecond: Int) : Thread() {
+        private var second: Int = startSecond
+        private var mills: Float = startSecond * 1000f
 
         override fun run() {
             super.run()
             try {
-                while(true){
+                while (true) {
 
-                    if(second >= playTime){
+                    if (second >= playTime) {
                         if (song.isRepeating) {
                             mills = 0f
                             second = 0
@@ -195,23 +202,23 @@ class SongActivity : AppCompatActivity() {
                         }
                     }
 
-                    if(isPlaying){
+                    if (isPlaying) {
                         sleep(50)
                         mills += 50
 
-                        runOnUiThread{
+                        runOnUiThread {
                             binding.songProgressSb.progress = ((mills / playTime) * 100).toInt()
                         }
 
-                        if (mills % 1000 == 0f){
-                            runOnUiThread{
+                        if (mills % 1000 == 0f) {
+                            runOnUiThread {
                                 binding.songStartTimeTv.text = String.format("%02d:%02d", second / 60, second % 60)
                             }
                             second++
                         }
                     }
                 }
-            }catch (e: InterruptedException){
+            } catch (e: InterruptedException) {
                 Log.d("Song", "쓰레드가 죽었습니다. ${e.message}")
             }
 

@@ -126,6 +126,8 @@
             android:id="@+id/home_today_music_list_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_today_music_title_tv" />
 
         <androidx.viewpager2.widget.ViewPager2
