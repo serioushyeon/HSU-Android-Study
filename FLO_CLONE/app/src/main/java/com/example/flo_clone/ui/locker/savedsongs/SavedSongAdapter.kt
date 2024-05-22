@@ -18,7 +18,7 @@ class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
     }
 
     interface OnItemClickListener{
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaveSongsViewHolder {
@@ -43,7 +43,7 @@ class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
             binding.root.setOnClickListener {
                 val pos = adapterPosition
                 if (pos != RecyclerView.NO_POSITION && mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(binding.root, pos)
+                    mOnItemClickListener.onItemClick()
                 }
             }
             deleteItem()

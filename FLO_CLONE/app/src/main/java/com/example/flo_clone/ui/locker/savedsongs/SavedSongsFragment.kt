@@ -36,12 +36,23 @@ class SavedSongsFragment : Fragment() {
         val itemList = ArrayList<SavedSongs>()
         itemList.add(SavedSongs(R.drawable.img_album_exp2,"하루끝","아이유"))
         itemList.add(SavedSongs(R.drawable.img_album_exp2,"금요일에 만나요","아이유"))
+        itemList.add(SavedSongs(R.drawable.img_album_exp2,"좋은날","아이유"))
+        itemList.add(SavedSongs(R.drawable.img_album_exp2,"너랑나","아이유"))
         itemList.add(SavedSongs(R.drawable.img_album_exp2,"선물","멜로망스"))
         itemList.add(SavedSongs(R.drawable.img_album_exp2,"Bad Boy","레드벨벳"))
+        itemList.add(SavedSongs(R.drawable.img_album_exp2,"빨간맛","레드벨벳"))
+        itemList.add(SavedSongs(R.drawable.img_album_exp2,"Psycho","레드벨벳"))
+        itemList.add(SavedSongs(R.drawable.img_album_exp2,"Rookie","레드벨벳"))
 
         // 어댑터 생성 (데이터 넣어줌)
         val savedSongAdapter = SavedSongAdapter(itemList)
         savedSongAdapter.notifyDataSetChanged()
+
+        savedSongAdapter.setOnItemClickListener(object : SavedSongAdapter.OnItemClickListener {
+            override fun onItemClick() {
+                // 아이템 클릭 시 수행할 동작
+            }
+        })
 
         // 리사이클러뷰와 어댑터 연결
         savedSongsPlayListRv.adapter = savedSongAdapter
