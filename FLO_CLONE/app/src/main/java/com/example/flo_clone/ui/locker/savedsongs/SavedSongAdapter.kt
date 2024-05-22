@@ -5,13 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.flo_clone.data.savedSongs
 import com.example.flo_clone.databinding.ItemSavedSongBinding
 
-data class savedSongs(
-    val img: Int,
-    val title: String,
-    val singer: String
-)
 class SavedSongAdapter(val itemList: ArrayList<savedSongs>) :
     RecyclerView.Adapter<SavedSongAdapter.saveSongsViewHolder>() {
 

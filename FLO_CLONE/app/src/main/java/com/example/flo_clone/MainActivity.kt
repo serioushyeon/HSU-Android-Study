@@ -12,7 +12,7 @@ import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
-import com.example.flo_clone.ui.song.Song
+import com.example.flo_clone.data.Song
 import com.example.flo_clone.ui.song.SongActivity
 import com.google.gson.Gson
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
 
-    private var song:Song = Song()
+    private var song: Song = Song()
     private var gson:Gson = Gson()
 
     companion object {
