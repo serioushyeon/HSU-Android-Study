@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
-        setOnClickView()
+        //setOnClickView()
         setVPAdapter()
         setIndicator()
 
@@ -103,20 +103,20 @@ class HomeFragment : Fragment() {
         currentPage+=1
     }
 
-    private fun setOnClickView() {
-        val albumImg = binding.albumIvImg1
-        albumImg.setOnClickListener {
-            val imgRes = R.drawable.lilac_album_cover
-            val song = SongPractice(binding.tvAlbumName1.text.toString(), binding.tvAlbumSinger1.text.toString()) // 데이터 설정
-            val albumFragment = AlbumFragment().apply {
-                arguments = Bundle().apply {
-                    putInt("imgRes", imgRes)
-                    putString("title", song.title)
-                    putString("singerName", song.singerName)
-                }
-            }
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, albumFragment).commitAllowingStateLoss()
-        }
-    }
+//    private fun setOnClickView() {
+//        val albumImg = binding.albumIvImg1
+//        albumImg.setOnClickListener {
+//            val imgRes = R.drawable.lilac_album_cover
+//            val song = SongPractice(binding.tvAlbumName1.text.toString(), binding.tvAlbumSinger1.text.toString()) // 데이터 설정
+//            val albumFragment = AlbumFragment().apply {
+//                arguments = Bundle().apply {
+//                    putInt("imgRes", imgRes)
+//                    putString("title", song.title)
+//                    putString("singerName", song.singerName)
+//                }
+//            }
+//            (context as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.frame_layout, albumFragment).commitAllowingStateLoss()
+//        }
+//    }
 }

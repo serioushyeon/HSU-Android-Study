@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo_clone.R
 import com.example.flo_clone.databinding.FragmentSavedSongsBinding
 
@@ -21,9 +22,28 @@ class SavedSongsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSavedSongsBinding.inflate(layoutInflater)
-
+        setRecyclerView()
         return binding.root
     }
 
+    private fun setRecyclerView() {
 
+        // 리사이클러뷰 생성 및 바인딩
+        val savedSongsPlayListRv = binding.savedSongsPlayListRv
+
+        // 리사이클러뷰에 넣을 데이터 리스트
+        val itemList = ArrayList<savedSongs>()
+        itemList.add(savedSongs(R.drawable.img_album_exp2,"하루끝","아이유"))
+        itemList.add(savedSongs(R.drawable.img_album_exp2,"금요일에 만나요","아이유"))
+        itemList.add(savedSongs(R.drawable.img_album_exp2,"선물","멜로망스"))
+        itemList.add(savedSongs(R.drawable.img_album_exp2,"Bad Boy","레드벨벳"))
+
+        // 어댑터 생성 (데이터 넣어줌)
+        val savedSongAdapter = SavedSongAdapter(itemList)
+        savedSongAdapter.notifyDataSetChanged()
+
+        // 리사이클러뷰와 어댑터 연결
+        savedSongsPlayListRv.adapter = savedSongAdapter
+        savedSongsPlayListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
 }
