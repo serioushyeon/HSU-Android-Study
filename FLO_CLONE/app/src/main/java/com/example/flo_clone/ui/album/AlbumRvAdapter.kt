@@ -16,7 +16,7 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
     }
 
     interface OnItemClickListener{
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(album: Album)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -30,19 +30,12 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
         holder.bind(albumList[position])
+        holder.itemView.setOnClickListener {
+            mOnItemClickListener.onItemClick(albumList[position])
+        }
     }
 
     inner class AlbumViewHolder(val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.root.setOnClickListener {
-                val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION && mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(binding.root, pos)
-                }
-            }
-        }
-
 
         fun bind(album: Album) {
             binding.itemAlbumTitleTv.text = album.title

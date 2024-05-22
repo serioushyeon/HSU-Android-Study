@@ -19,6 +19,7 @@ import com.example.flo_clone.ui.album.AlbumRvAdapter
 import com.example.flo_clone.ui.home.banner.BannerFragment
 import com.example.flo_clone.ui.home.banner.BannerVPAdapter
 import com.example.flo_clone.ui.home.panel.PanelVPAdapter
+import com.google.gson.Gson
 
 data class SongPractice(val title: String, val singerName: String)
 
@@ -113,6 +114,24 @@ class HomeFragment : Fragment() {
         val albumRvAdapter = AlbumRvAdapter(albumDatas)
         binding.homeTodayMusicAlbumRv.adapter = albumRvAdapter
         binding.homeTodayMusicAlbumRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        albumRvAdapter.setOnItemClickListener(object: AlbumRvAdapter.OnItemClickListener{
+            override fun onItemClick(album: Album) {
+                changeAlbumFragment(album)
+            }
+        })
+    }
+
+    private fun changeAlbumFragment(album: Album) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, AlbumFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val albumJson = gson.toJson(album)
+                    putString("album", albumJson)
+                }
+            })
+            .commitAllowingStateLoss()
     }
 
     private fun setDataList() {
