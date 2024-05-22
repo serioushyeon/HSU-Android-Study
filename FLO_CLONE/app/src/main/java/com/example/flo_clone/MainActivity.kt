@@ -115,8 +115,11 @@ class MainActivity : AppCompatActivity() {
 
     // 미니 플레이어의 제목, 가수명, seekBar progress를 Song의 데이터로 설정하는 함수
     private fun setMiniPlayer(song: Song) {
-        binding.mainMiniPlayerTitleTv.text = song.title
-        binding.mainMiniPlayerSingerTv.text = song.singer
+        val title = intent.getStringExtra("album_title")
+        val singer = intent.getStringExtra("album_singer")
+
+        binding.mainMiniPlayerTitleTv.text = title ?: song.title
+        binding.mainMiniPlayerSingerTv.text = singer ?: song.singer
         binding.mainSongProgressSb.progress = (song.second * 100000) / song.playTime
     }
 
