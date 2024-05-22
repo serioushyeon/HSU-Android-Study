@@ -9,7 +9,7 @@ import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.ItemSavedSongBinding
 
 class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
-    RecyclerView.Adapter<SavedSongAdapter.saveSongsViewHolder>() {
+    RecyclerView.Adapter<SavedSongAdapter.SaveSongsViewHolder>() {
 
     private lateinit var mOnItemClickListener: OnItemClickListener
 
@@ -21,20 +21,20 @@ class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
         fun onItemClick(view: View, position: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): saveSongsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaveSongsViewHolder {
         val binding = ItemSavedSongBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return saveSongsViewHolder(binding)
+        return SaveSongsViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return itemList.count()
     }
 
-    override fun onBindViewHolder(holder: saveSongsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SaveSongsViewHolder, position: Int) {
         holder.bind(itemList[position])
     }
 
-    inner class saveSongsViewHolder(val binding: ItemSavedSongBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class SaveSongsViewHolder(val binding: ItemSavedSongBinding) : RecyclerView.ViewHolder(binding.root) {
         var img = binding.itemAlbumCoverImgIv
         var title = binding.itemAlbumTitleTv
         var singer = binding.itemAlbumSingerTv
