@@ -13,6 +13,7 @@ class lockerVpAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         return when(position){
             0-> locker_savemusic_fragment()
             else-> locker_musicfile_fragment()
+
         }
     }
 }

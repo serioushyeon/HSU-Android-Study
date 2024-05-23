@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" tools:targetApi="tiramisu" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -21,9 +24,9 @@
             android:name=".locker_savemusic_fragment"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Splash">
+            android:theme="@style/Theme.FLO">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,11 +48,14 @@
             android:name=".HomeFragment"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
             android:exported="false"
             >
 
         </activity>
+        <service android:name=".Service"
+            android:foregroundServiceType="dataSync" />
+
     </application>
 
 </manifest>
