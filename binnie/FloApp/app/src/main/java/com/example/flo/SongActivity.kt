@@ -1,5 +1,7 @@
 package com.example.flo
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -56,10 +58,12 @@ class SongActivity : AppCompatActivity() { // 액티비티에서 안드로이드
 
         binding.songMiniplayerIv.setOnClickListener {
             setPlayerStatus(true)
+            startStopService()
         }
 
         binding.songPauseIv.setOnClickListener {
             setPlayerStatus(false)
+            startStopService()
         }
         binding.songRepeatbtnIv.setOnClickListener {
             setRepeat()
@@ -77,7 +81,31 @@ class SongActivity : AppCompatActivity() { // 액티비티에서 안드로이드
             setLike(song.isLike)
         }
     }
+    // 서비스
+    private fun startStopService() {
+        if (isServiceRunning(ForegroundService::class.java)) {
+            Toast.makeText(this, "Foreground Service Stopped", Toast.LENGTH_SHORT).show()
+            stopService(Intent(this, ForegroundService::class.java))
+        }
+        else {
+            Toast.makeText(this, "Foreground Service Started", Toast.LENGTH_SHORT).show()
+            startService(Intent(this, ForegroundService::class.java))
+        }
+    }
 
+    private fun isServiceRunning(inputClass : Class<ForegroundService>) : Boolean {
+        val manager : ActivityManager = getSystemService(
+            Context.ACTIVITY_SERVICE
+        ) as ActivityManager
+
+        for (service : ActivityManager.RunningServiceInfo in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (inputClass.name.equals(service.service.className)) {
+                return true
+            }
+
+        }
+        return false
+    }
     private fun initSong() {
         if(intent.hasExtra("title") && intent.hasExtra("singer")) {
             song = Song(
