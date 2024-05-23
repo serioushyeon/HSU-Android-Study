@@ -1,11 +1,13 @@
 package com.example.flo
 
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.flo.databinding.ActivityMainBinding
 import com.google.gson.Gson
+import java.util.Timer
 
 class MainActivity : AppCompatActivity() {
 
@@ -77,8 +79,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setMiniPlayer(song: Song){
-        binding.mainMiniplayerTitleTv.text = song.title
-        binding.mainMiniplayerSingerTv.text = song.singer
+        val title = intent.getStringExtra("album_title")
+        val singer = intent.getStringExtra("album_singer")
+
+        binding.mainMiniplayerTitleTv.text = title ?: song.title
+        binding.mainMiniplayerSingerTv.text = singer ?: song.singer
         binding.mainProgressSb.progress = (song.second*100000)/song.playTime
     }
 
@@ -96,4 +101,5 @@ class MainActivity : AppCompatActivity() {
         setMiniPlayer(song)
 
     }
+
 }
