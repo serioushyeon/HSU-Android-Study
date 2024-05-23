@@ -10,7 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     //lateinit은 나중에 초기화 될것을 나타냄
     // ActivityMainBinding은 레이아웃 파일이름에 Binding을 추가한이름
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
@@ -92,8 +92,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setMiniPlayer(song: Song){
-        binding.mainPlayTitleTv.text = song.title
-        binding.mainPlaySingerTv.text = song.singer
+//        binding.mainPlayTitleTv.text = song.title
+//        binding.mainPlaySingerTv.text = song.singer
+        val title = intent.getStringExtra("album_title") //[오늘 발매음악]에서 재생 버튼 클릭시 miniplayer에 제목, 가수명 변경
+        val singer = intent.getStringExtra("album_singer")
+
+        binding.mainPlayTitleTv.text = title ?: song.title
+        binding.mainPlaySingerTv.text = singer ?: song.singer
         binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
     }
 
@@ -101,6 +106,8 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val songJson = sharedPreferences.getString("songData",null)
+        //val albumJson = getSharedPreferences("album", MODE_PRIVATE) //이건 아닌 것 같음, 데이터 받아오는 거
+
 
         song = if(songJson == null){
             Song("내일의 우리","카더가든",0,60,false,"music_tomorow")
