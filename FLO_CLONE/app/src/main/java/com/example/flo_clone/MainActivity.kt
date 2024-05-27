@@ -1,27 +1,46 @@
 package com.example.flo_clone
 
+import android.Manifest
 import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.example.flo_clone.databinding.ActivityMainBinding
 import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
-import com.example.flo_clone.ui.song.Song
+import com.example.flo_clone.data.Song
 import com.example.flo_clone.ui.song.SongActivity
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
 
-    private var song:Song = Song()
+    private var song: Song = Song()
     private var gson:Gson = Gson()
+
+    private val CHANNEL_ID = "testChannel01"
+    private lateinit var notificationManager: NotificationManager
 
     companion object {
         const val STRING_INTENT_KEY = "my_string_key"
@@ -36,6 +55,63 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun displayNotification() {
+
+        // 클릭시 실행할 액비티비티 설정
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val notifyId = 0
+        // 채널 생성
+        val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationCompat
+                .Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.img_album_exp2)
+                .setContentTitle("Flo")
+                .setContentText("아이유 Lilac")
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
+                .setProgress(100, 0,true)
+
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        // 백그라운드 스코프를 사용하여 코루틴 실행
+        CoroutineScope(Dispatchers.IO).launch {
+            for (i in 1..1000) {
+                notification.setProgress(300, i, true)
+                if (ActivityCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return@launch
+                }
+                NotificationManagerCompat.from(this@MainActivity).notify(notifyId, notification.build())
+                delay(100)
+            }
+
+        }
+        NotificationManagerCompat.from(this).notify(notifyId, notification.build())
+
+    }
+
+    private fun createNotificationChannel(channelId: String, name: String, channelDescription: String) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = channelDescription
+            }
+
+            // 알림 매니저 생성 및 채널에 등록
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager?.createNotificationChannel(channel)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -45,6 +121,12 @@ class MainActivity : AppCompatActivity() {
         setStartFragment()
         setBottomNavigation()
         changeActivity()
+
+        createNotificationChannel(CHANNEL_ID, "Test Channel", "Test Channel Description")
+
+        binding.playerListBtn.setOnClickListener {
+          displayNotification()
+        }
     }
     private fun makeToastMsg(msg: String) {
         Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
@@ -115,8 +197,11 @@ class MainActivity : AppCompatActivity() {
 
     // 미니 플레이어의 제목, 가수명, seekBar progress를 Song의 데이터로 설정하는 함수
     private fun setMiniPlayer(song: Song) {
-        binding.mainMiniPlayerTitleTv.text = song.title
-        binding.mainMiniPlayerSingerTv.text = song.singer
+        val title = intent.getStringExtra("album_title")
+        val singer = intent.getStringExtra("album_singer")
+
+        binding.mainMiniPlayerTitleTv.text = title ?: song.title
+        binding.mainMiniPlayerSingerTv.text = singer ?: song.singer
         binding.mainSongProgressSb.progress = (song.second * 100000) / song.playTime
     }
 
