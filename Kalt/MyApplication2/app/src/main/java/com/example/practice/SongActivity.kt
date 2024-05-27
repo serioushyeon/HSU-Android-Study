@@ -18,10 +18,12 @@ class SongActivity : AppCompatActivity() {
     lateinit var timer : Timer
     private var mediaPlayer : MediaPlayer? = null
     private var gson: Gson = Gson()
+    private var checking : Boolean  = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivitySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initsong()
         setPlayer(song)
         binding.songDown.setOnClickListener {
@@ -49,7 +51,6 @@ class SongActivity : AppCompatActivity() {
             binding.randdomInactiveIv.visibility = View.VISIBLE
             binding.randdomInactiveIv2.visibility = View.GONE
         }
-
 
     }
     // 사용자가 포커스를 잃었을 때 음악이 중지
@@ -84,6 +85,9 @@ class SongActivity : AppCompatActivity() {
             )
         }
         startTimer()
+        if(checking==true){
+            startTimer()
+        }
     }
     private fun setPlayer(song : Song){
         binding.songMusicTitleTv.text = intent.getStringExtra("title")
@@ -129,6 +133,8 @@ class SongActivity : AppCompatActivity() {
             try {
                 while(true){
                     if(second >=playTime){
+                       // checking = true
+                        startTimer()
                         break
                     }
                     if(isplaying){

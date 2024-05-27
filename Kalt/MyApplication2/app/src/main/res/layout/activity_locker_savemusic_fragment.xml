@@ -7,13 +7,62 @@
     android:layout_height="match_parent"
     tools:context=".locker_savemusic_fragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="저장한 곡이 없습니다."
-        app:layout_constraintBottom_toBottomOf="parent"
+   <LinearLayout
+       android:id="@+id/upper_linearlayout_tiv"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:orientation="horizontal">
+
+       <ImageView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="172dp"
+           android:layout_marginStart="5dp"
+           android:src="@drawable/baseline_check_24"/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="170dp"
+           android:layout_marginStart="10dp"
+           android:textStyle="bold"
+           android:textSize="17dp"
+           android:text="전체선택"/>
+       <ImageView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="172dp"
+           android:layout_marginStart="20dp"
+           android:src="@drawable/baseline_check_24"/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="10dp"
+           android:textStyle="bold"
+           android:layout_marginTop="170dp"
+           android:textSize="17dp"
+           android:text="전체듣기"/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="120dp"
+           android:layout_marginTop="170dp"
+           android:textSize="17dp"
+           android:textStyle="bold"
+           android:text="편집"/>
+   </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/savemusic_rv"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/upper_linearlayout_tiv" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
