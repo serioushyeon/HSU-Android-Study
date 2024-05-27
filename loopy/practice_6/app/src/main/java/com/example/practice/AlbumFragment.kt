@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.practice.data.Album
 import com.example.practice.databinding.FragmentAlbumBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 
 class AlbumFragment : Fragment() {
     private lateinit var binding: FragmentAlbumBinding
@@ -16,6 +18,7 @@ class AlbumFragment : Fragment() {
     private var isLike = false
     private lateinit var albumAdapter : AlbumAdapter
     private val infoTab = arrayListOf("수록곡","상세정보","영상")
+    private var gson = Gson()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,6 +29,9 @@ class AlbumFragment : Fragment() {
         setTabLayout()
         with(binding) {
 
+            val albumJson = arguments?.getString("album")
+            val album = gson.fromJson(albumJson, Album::class.java)
+            setInit(album)
             Log.d("값", "arguments: $arguments")
             Log.d("값", "${arguments?.getString("title")} ${arguments?.getString("singer")}")
             albumTitleTv.text = arguments?.getString("title")
@@ -54,6 +60,12 @@ class AlbumFragment : Fragment() {
         }
         onClickBackButton()
         return binding.root
+    }
+
+    private fun setInit(album: Album) {
+        binding.albumPreviewIv.setImageResource(album.coverImg!!)
+        binding.albumTitleTv.text = album.title.toString()
+        binding.albumSingerTv.text = album.singer.toString()
     }
 
     private fun setAlbumImage(drawable: Int) {

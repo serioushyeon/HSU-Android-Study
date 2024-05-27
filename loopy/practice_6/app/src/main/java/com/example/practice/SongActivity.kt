@@ -45,6 +45,7 @@ class SongActivity : AppCompatActivity() {
 
     private fun setPlayer() {
         with(binding) {
+            songProfileMusicIv.setImageResource(intent.getIntExtra("albumImg",R.drawable.img_album_exp2))
             with(songex) {
                 songTitleTv.text = title
                 songSingerTv.text = singer
