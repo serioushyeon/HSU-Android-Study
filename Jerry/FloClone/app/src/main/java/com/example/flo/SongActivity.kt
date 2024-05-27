@@ -77,6 +77,9 @@ class SongActivity : AppCompatActivity() {
             }
         }
 
+        binding.songLikeIv.setOnClickListener {
+
+        }
 
     }
 
@@ -102,6 +105,13 @@ class SongActivity : AppCompatActivity() {
         binding.songProgressSb.progress=(song.second * 1000 / song.playTime)
         val music = resources.getIdentifier(song.music, "raw", this.packageName)
         mediaPlayer = MediaPlayer.create(this, music)
+
+        if (song.isLike){
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        } else{
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
+
         setPlayerStatus(song.isPlaying)
     }
 
