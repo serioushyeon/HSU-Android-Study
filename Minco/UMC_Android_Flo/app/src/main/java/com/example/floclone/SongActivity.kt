@@ -27,6 +27,7 @@ class SongActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //바인딩 초기화
         //이렇게 하는 형식을 기억한다!(바인딩)
         binding = ActivitySongBinding.inflate(layoutInflater)

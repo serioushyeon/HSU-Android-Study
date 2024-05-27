@@ -7,9 +7,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.floclone.databinding.FragmentHomeBinding
+import com.google.gson.Gson
 import java.util.Timer
 import kotlin.concurrent.scheduleAtFixedRate
 
@@ -20,6 +23,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 class HomeFragment : Fragment() {
     //FragmentHomeBinding은 레이아웃 파일에 따라 자동으로 생성된 바인딩 클래스
     private lateinit var binding : FragmentHomeBinding // 뷰 바인딩
+    private var albumDatas = ArrayList<Album>()
     private val timer = Timer()
     private val handler = Handler(Looper.getMainLooper())
 
@@ -36,11 +40,36 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
             binding = FragmentHomeBinding.inflate(layoutInflater)
-            binding.homeTodayAlbum1Iv.setOnClickListener {
-                (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout, AlbumFragment()).commitAllowingStateLoss()
+//            binding.homeTodayAlbum1Iv.setOnClickListener {
+//                (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout, AlbumFragment()).commitAllowingStateLoss()
+//            }
+
+        //데이터 리스트 생성 더미 데이터
+        albumDatas.apply {
+            add(Album("내일의 우리","카더가든",R.drawable.img_album_exp3))
+            add(Album("Shake It Off","Tatlor Swift",R.drawable.img_album_exp))
+            add(Album("우리의 사랑은","찰리빈웍스",R.drawable.img_album_exp4))
+            add(Album("Ling Ling","검정치마",R.drawable.img_album_exp5))
+            add(Album("Surf boy","혁오",R.drawable.img_album_exp6 ))
+        }
+
+        //어댑터 arrayList연결
+        // 매개변수로 만들었던 데이터 리스트 던져줌
+        val albumRVAdapter = AlbumRVAdapter(albumDatas)
+        binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter //어떤 어댑터를 사용해야하는지 지정
+        binding.homeTodayMusicAlbumRv.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false )
+
+        albumRVAdapter.setMyItemClickListener(object :AlbumRVAdapter.MyItemClickLitener{
+            override fun onItemClick(album: Album) {
+                //앨범 프레그먼트로 전환
+                changeAlbumFragment(album)
             }
 
+            override fun onRemoveAlbum(position: Int) {
+               albumRVAdapter.removeItem(position)
+            }
 
+        })
 
             //------------------ 상단 추천 부분 ----------------------------//
             val homeRecommendAdapter = HomeRecommendVPAdapter(this)
@@ -62,6 +91,18 @@ class HomeFragment : Fragment() {
             //배너와 인디케이터 연결
             binding.homeBannerIndicator.setViewPager((binding.homeBannerVp))
             return binding.root
+    }
+
+    private fun changeAlbumFragment(album: Album) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, AlbumFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val albumJson = gson.toJson(album)
+                    putString("album", albumJson)
+                }
+            })
+            .commitAllowingStateLoss()
     }
 
     private fun startAutoSlide(adpater : HomeRecommendVPAdapter) {
