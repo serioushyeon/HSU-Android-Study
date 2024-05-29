@@ -9,17 +9,17 @@ import androidx.room.Update
 @Dao
 interface SongDao {
     @Insert
-    fun insert(song: Song)
+    fun insert(song: SongEntity)
 
     @Update
-    fun update(song: Song)
+    fun update(song: SongEntity)
 
     @Delete
-    fun delete(song: Song)
+    fun delete(song: SongEntity)
 
     @Query("SELECT * FROM SongTable")
-    fun getSongs(): List<Song>
+    fun getSongs(): List<SongEntity>
 
     @Query("SELECT * FROM SongTable WHERE id = :id")
-    fun getSong(id: Int): Song
+    fun getSong(id: Int): SongEntity
 }
