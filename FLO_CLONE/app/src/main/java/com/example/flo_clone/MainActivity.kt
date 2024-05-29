@@ -19,13 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.flo_clone.data.Song
 import com.example.flo_clone.databinding.ActivityMainBinding
 import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
-import com.example.flo_clone.room.Song
 import com.example.flo_clone.room.SongDatabase
+import com.example.flo_clone.room.SongEntity
 import com.example.flo_clone.ui.song.SongActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
 
-    private var song: Song = Song()
+    private var song: SongEntity = SongEntity()
     private var gson:Gson = Gson()
 
     private val CHANNEL_ID = "testChannel01"
@@ -138,8 +139,8 @@ class MainActivity : AppCompatActivity() {
 
     // mainPlayer 클릭하면 액티비티 변경하는 함수
     private fun changeActivity() {
-        val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
-            0, 214, false, "music_lilac")
+//        val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
+//            0, 214, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
             val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
@@ -195,7 +196,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 미니 플레이어의 제목, 가수명, seekBar progress를 Song의 데이터로 설정하는 함수
-    private fun setMiniPlayer(song: Song) {
+    private fun setMiniPlayer(song: SongEntity) {
         val title = intent.getStringExtra("album_title")
         val singer = intent.getStringExtra("album_singer")
 
@@ -213,52 +214,56 @@ class MainActivity : AppCompatActivity() {
         if (songs.isNotEmpty()) return
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "Lilac",
                 "아이유 (IU)",
                 0,
                 200,
                 false,
                 "music_lilac",
+                false,
                 R.drawable.img_album_exp2,
                 false,
             )
         )
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "Flu",
                 "아이유 (IU)",
                 0,
                 200,
                 false,
                 "music_flu",
+                false,
                 R.drawable.img_album_exp2,
                 false,
             )
         )
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "Butter",
                 "방탄소년단 (BTS)",
                 0,
                 190,
                 false,
                 "music_butter",
+                false,
                 R.drawable.img_album_exp,
                 false,
             )
         )
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "Next Level",
                 "에스파 (AESPA)",
                 0,
                 210,
                 false,
                 "music_next",
+                false,
                 R.drawable.img_album_exp3,
                 false,
             )
@@ -266,13 +271,14 @@ class MainActivity : AppCompatActivity() {
 
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "Boy with Luv",
                 "music_boy",
                 0,
                 230,
                 false,
                 "music_lilac",
+                false,
                 R.drawable.img_album_exp4,
                 false,
             )
@@ -280,13 +286,14 @@ class MainActivity : AppCompatActivity() {
 
 
         songDB.songDao().insert(
-            Song(
+            SongEntity(
                 "BBoom BBoom",
                 "모모랜드 (MOMOLAND)",
                 0,
                 240,
                 false,
                 "music_bboom",
+                false,
                 R.drawable.img_album_exp5,
                 false,
             )
@@ -311,7 +318,6 @@ class MainActivity : AppCompatActivity() {
             songDB.songDao().getSong(songId)    // 있으면 songId로 저장된 song 가져옴
         }
 
-        Log.d("song ID", "song ID: ${song.id.toString()}")
         setMiniPlayer(song)
     }
 
