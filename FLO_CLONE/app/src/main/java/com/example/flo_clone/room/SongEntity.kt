@@ -1,6 +1,7 @@
 package com.example.flo_clone.room
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "SongTable")
@@ -13,7 +14,8 @@ data class SongEntity (
     var music: String = "",
     var isRepeating: Boolean = false,
     var coverImg: Int? = null,
-    var isLike: Boolean = false
+    var isLike: Boolean = false,
+    var albumIdx: Int? = 0
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 }
