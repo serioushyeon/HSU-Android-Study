@@ -119,6 +119,11 @@ class HomeFragment : Fragment() {
             override fun onItemClick(album: Album) {
                 changeAlbumFragment(album)
             }
+
+            override fun onPlayBtnClick(item: Album) {
+               val activity = activity as MainActivity?
+                activity?.updateValue(item)
+            }
         })
     }
 

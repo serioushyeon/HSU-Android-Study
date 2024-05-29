@@ -10,6 +10,7 @@ import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
 import com.example.flo_clone.data.Album
 import com.example.flo_clone.databinding.FragmentAlbumBinding
+import com.example.flo_clone.ui.home.HomeFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 
@@ -42,6 +43,8 @@ class AlbumFragment : Fragment() {
         val albumJson = arguments?.getString("album")
         val album = gson.fromJson(albumJson, Album::class.java)
         setInit(album)
+
+        binding
     }
 
     private fun setInit(album: Album) {
@@ -53,9 +56,14 @@ class AlbumFragment : Fragment() {
 
     private fun setButton() {
         //뒤로가기 버튼 클릭
-        binding.btnArrowBlackIb.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
+//        binding.btnAlbumBackIb.setOnClickListener {
+//            val intent = Intent(requireContext(), MainActivity::class.java)
+//            startActivity(intent)
+//        }
+
+        binding.btnAlbumBackIb.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, HomeFragment()).commitAllowingStateLoss()
         }
     }
 

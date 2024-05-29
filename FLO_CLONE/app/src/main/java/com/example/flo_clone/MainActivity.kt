@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.flo_clone.data.Album
 import com.example.flo_clone.data.Song
 import com.example.flo_clone.databinding.ActivityMainBinding
 import com.example.flo_clone.ui.home.HomeFragment
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     private val CHANNEL_ID = "testChannel01"
     private lateinit var notificationManager: NotificationManager
 
+    private var ab = Album()
+
+
     companion object {
         const val STRING_INTENT_KEY = "my_string_key"
         const val TAG = "MainActivity"
@@ -55,6 +59,12 @@ class MainActivity : AppCompatActivity() {
             val returnString = result.data?.getStringExtra(MainActivity.STRING_INTENT_KEY)
             returnString?.let { makeToastMsg(it) }
         }
+    }
+
+    fun updateValue(album: Album) {
+        ab = album
+        binding.mainMiniPlayerTitleTv.text = album.title.toString()
+        binding.mainMiniPlayerSingerTv.text = album.singer.toString()
     }
 
     private fun displayNotification() {
