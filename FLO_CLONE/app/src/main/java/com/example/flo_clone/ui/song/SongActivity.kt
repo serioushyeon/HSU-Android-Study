@@ -128,11 +128,6 @@ class SongActivity : AppCompatActivity() {
         }
     }
 
-    private fun startTimer() {
-        timer = Timer(songs[nowPos].playTime, songs[nowPos].isPlaying)
-        timer.start()
-    }
-
     // 뒤로가기 버튼 쓰면 호출되는 함수
     override fun onBackPressed() {
         super.onBackPressed()
@@ -140,10 +135,6 @@ class SongActivity : AppCompatActivity() {
             putExtra(MainActivity.STRING_INTENT_KEY, binding.songTitleTv.text.toString())
         }
         setResult(Activity.RESULT_OK, intent)
-        //intent.putExtra("title", binding.songTitleTv.text.toString())
-        // 이동할 때 액티비티를 스택에서 제거
-        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        //startActivity(intent)
     }
 
     private fun setButton() {
@@ -201,17 +192,6 @@ class SongActivity : AppCompatActivity() {
             }
         }
 
-        // 좋아요(찜하기)
-        var isLike = true
-        binding.songLikeIv.setOnClickListener{
-            isLike = !isLike
-            if (isLike) {
-                binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
-            } else {
-                binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
-            }
-        }
-
         // 블랙리스트?
         var isUnLike = true
         binding.songUnlikeIv.setOnClickListener{
@@ -238,6 +218,11 @@ class SongActivity : AppCompatActivity() {
             binding.nuguBtnPlayIb.setImageResource(R.drawable.nugu_btn_pause_32)
             mediaPlayer?.start()
         }
+    }
+
+    private fun startTimer() {
+        timer = Timer(songs[nowPos].playTime, songs[nowPos].isPlaying)
+        timer.start()
     }
 
     inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
