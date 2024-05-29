@@ -5,6 +5,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -100,11 +101,31 @@ class SongActivity : AppCompatActivity() {
         binding.startTimerTv.text = String.format("%02d:%02d", songEntity.second / 60, songEntity.second % 60)
         binding.endTimerTv.text = String.format("%02d:%02d", songEntity.playTime / 60, songEntity.playTime % 60)
         binding.albumImgIv.setImageResource(songEntity.coverImg!!)
-
         binding.songProgressSb.progress = (songEntity.second * 1000 / songEntity.playTime)
+
         val music = resources.getIdentifier(songEntity.music, "raw", this.packageName)
         mediaPlayer = MediaPlayer.create(this, music)
+
+        if (songEntity.isLike) {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        } else {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
+
         setPlayerStatus(songEntity.isPlaying)
+    }
+
+    // 좋아요 (하트) 클릭 Room DB 연동 및 뷰 렌더링하는 함수
+    private fun setLike(isLike: Boolean) {
+        songs[nowPos].isLike = !isLike
+        songDB.songDao().updateIsLikeById(!isLike, songs[nowPos].id) // DB 업데이트
+
+        // 뷰 렌더링
+        if (!isLike) {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        } else {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
     }
 
     private fun startTimer() {
@@ -135,6 +156,11 @@ class SongActivity : AppCompatActivity() {
         binding.nuguBtnPlayIb.setOnClickListener {
             isPlaying = !isPlaying // 클릭할 때마다 상태 변경
             setPlayerStatus(isPlaying) // 변경된 상태에 따라 이미지 변경
+        }
+
+        // 좋아요 버튼
+        binding.songLikeIv.setOnClickListener {
+            setLike(songs[nowPos].isLike)
         }
 
         // 이전 곡 재생
