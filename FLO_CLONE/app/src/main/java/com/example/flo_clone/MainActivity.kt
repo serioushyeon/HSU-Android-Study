@@ -19,9 +19,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.flo_clone.data.Album
-import com.example.flo_clone.data.Song
+import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.ActivityMainBinding
+import com.example.flo_clone.room.AlbumEntity
 import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     private val CHANNEL_ID = "testChannel01"
     private lateinit var notificationManager: NotificationManager
 
-    private var ab = Album()
+    private var abEntity = AlbumEntity()
 
 
     companion object {
@@ -61,10 +61,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateValue(album: Album) {
-        ab = album
-        binding.mainMiniPlayerTitleTv.text = album.title.toString()
-        binding.mainMiniPlayerSingerTv.text = album.singer.toString()
+    fun updateValue(albumEntity: AlbumEntity) {
+        abEntity = albumEntity
+        binding.mainMiniPlayerTitleTv.text = albumEntity.title.toString()
+        binding.mainMiniPlayerSingerTv.text = albumEntity.singer.toString()
     }
 
     private fun displayNotification() {
@@ -131,6 +131,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         inputDummySongs()
+        inputDummyAlbums()
+
         setStartFragment()      // 시작 프래그먼트 설정 (홈)
         setBottomNavigation()   // 바텀네비게이션 뷰 설정
         changeActivity()        // MainPlayer 클릭하면 액티비티 변경
@@ -234,6 +236,7 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp2,
                 false,
+                0,
             )
         )
 
@@ -248,6 +251,7 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp2,
                 false,
+                1,
             )
         )
 
@@ -262,6 +266,7 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp,
                 false,
+                2,
             )
         )
 
@@ -276,6 +281,7 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp3,
                 false,
+                3,
             )
         )
 
@@ -291,6 +297,7 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp4,
                 false,
+                4,
             )
         )
 
@@ -306,11 +313,55 @@ class MainActivity : AppCompatActivity() {
                 false,
                 R.drawable.img_album_exp5,
                 false,
+                5,
             )
         )
 
         val _songs = songDB.songDao().getSongs()
         Log.d("DB data", _songs.toString())
+    }
+
+    private fun inputDummyAlbums() {
+        val songDB = SongDatabase.getInstance(this)!!
+        val albums = songDB.albumDao().getAlbums()
+
+        if (albums.isNotEmpty()) return
+
+        songDB.albumDao().insert(
+            AlbumEntity(
+                0,
+                "IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2
+            )
+        )
+
+        songDB.albumDao().insert(
+            AlbumEntity(
+                1,
+                "Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp
+            )
+        )
+
+        songDB.albumDao().insert(
+            AlbumEntity(
+                2,
+                "iScreaM Vol.10 : Next Level Remixes", "에스파 (AESPA)", R.drawable.img_album_exp3
+            )
+        )
+
+        songDB.albumDao().insert(
+            AlbumEntity(
+                3,
+                "MAP OF THE SOUL : PERSONA", "방탄소년단 (BTS)", R.drawable.img_album_exp4
+            )
+        )
+
+        songDB.albumDao().insert(
+            AlbumEntity(
+                4,
+                "GREAT!", "모모랜드 (MOMOLAND)", R.drawable.img_album_exp5
+            )
+        )
+
     }
 
     override fun onStart() {

@@ -13,8 +13,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.flo_clone.ui.album.AlbumFragment
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
-import com.example.flo_clone.data.Album
+import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.FragmentHomeBinding
+import com.example.flo_clone.room.AlbumEntity
+import com.example.flo_clone.room.SongDatabase
 import com.example.flo_clone.ui.album.AlbumRvAdapter
 import com.example.flo_clone.ui.home.banner.BannerFragment
 import com.example.flo_clone.ui.home.banner.BannerVPAdapter
@@ -26,9 +28,11 @@ data class SongPractice(val title: String, val singerName: String)
 class HomeFragment : Fragment() {
 
     private lateinit var binding : FragmentHomeBinding // 뷰 바인딩
-    private var albumDatas = ArrayList<Album>()
+    private var albumDatas = ArrayList<AlbumEntity>()
 
-    var currentPage = 0
+    private var currentPage = 0
+
+    private lateinit var songDB: SongDatabase
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +45,6 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
-        setDataList()
         setAlbumRvAdapter()
         setVPAdapter()
         setIndicator()
@@ -111,43 +114,38 @@ class HomeFragment : Fragment() {
 
     private fun setAlbumRvAdapter() {
 
+        // songDB에서 album list를 가져옴
+        songDB = SongDatabase.getInstance(requireContext())!!
+        albumDatas.addAll(songDB.albumDao().getAlbums())
+
+        // 더미데이터와 어뎁터 연결
         val albumRvAdapter = AlbumRvAdapter(albumDatas)
         binding.homeTodayMusicAlbumRv.adapter = albumRvAdapter
         binding.homeTodayMusicAlbumRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         albumRvAdapter.setOnItemClickListener(object: AlbumRvAdapter.OnItemClickListener{
-            override fun onItemClick(album: Album) {
+
+            override fun onItemClick(album: AlbumEntity) {
                 changeAlbumFragment(album)
             }
 
-            override fun onPlayBtnClick(item: Album) {
-               val activity = activity as MainActivity?
+            override fun onPlayBtnClick(item: AlbumEntity) {
+                val activity = activity as MainActivity?
                 activity?.updateValue(item)
             }
         })
     }
 
-    private fun changeAlbumFragment(album: Album) {
+    private fun changeAlbumFragment(albumEntity: AlbumEntity) {
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, AlbumFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
-                    val albumJson = gson.toJson(album)
+                    val albumJson = gson.toJson(albumEntity)
                     putString("album", albumJson)
                 }
             })
             .commitAllowingStateLoss()
-    }
-
-    private fun setDataList() {
-        albumDatas.apply {
-            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp2))
-            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2))
-            add(Album("Next Level", "에스파 (Aespa)", R.drawable.img_album_exp2))
-            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp2))
-            add(Album("BBoom BBoom", "모모랜드 (MomoLand)", R.drawable.img_album_exp2))
-            add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp2))
-        }
     }
 
 }

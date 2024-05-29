@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "AlbumTable")
-data class Album(
+data class AlbumEntity(
     @PrimaryKey (autoGenerate = false) var id: Int = 0,
     var title: String? = "",
     var singer: String? = "",

@@ -1,14 +1,13 @@
 package com.example.flo_clone.ui.album
 
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flo_clone.MainActivity
-import com.example.flo_clone.data.Album
+import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.ItemAlbumBinding
-class AlbumRvAdapter (val albumList: ArrayList<Album>) :
+import com.example.flo_clone.room.AlbumEntity
+
+class AlbumRvAdapter (val albumList: ArrayList<AlbumEntity>) :
     RecyclerView.Adapter<AlbumRvAdapter.AlbumViewHolder>() {
 
     private lateinit var mOnItemClickListener: OnItemClickListener
@@ -18,8 +17,8 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
     }
 
     interface OnItemClickListener{
-        fun onItemClick(album: Album)
-        fun onPlayBtnClick(item: Album)
+        fun onItemClick(album: AlbumEntity)
+        fun onPlayBtnClick(item: AlbumEntity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -42,10 +41,10 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
     }
 
     inner class AlbumViewHolder(val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(album: Album) {
-            binding.itemAlbumTitleTv.text = album.title
-            binding.itemAlbumSingerTv.text = album.singer
-            binding.itemAlbumCoverImgIv.setImageResource(album.converImg!!)
+        fun bind(albumEntity: AlbumEntity) {
+            binding.itemAlbumTitleTv.text = albumEntity.title
+            binding.itemAlbumSingerTv.text = albumEntity.singer
+            binding.itemAlbumCoverImgIv.setImageResource(albumEntity.coverImg!!)
         }
     }
 }
