@@ -18,13 +18,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
 import com.example.flo_clone.databinding.ActivityMainBinding
 import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
-import com.example.flo_clone.data.Song
+import com.example.flo_clone.room.Song
+import com.example.flo_clone.room.SongDatabase
 import com.example.flo_clone.ui.song.SongActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -160,8 +160,6 @@ class MainActivity : AppCompatActivity() {
 
     // 바텀네비게이션 뷰를 설정하는 함수
     // menu 파일의 home_navigation_menu 파일 사용
-    // (android:icon="@drawable/click_look_img" 선택되면 이미지 변경) drawable의 click_look_img.xml 파일 (아이템마다 다름)
-    // drawable 파일의 btm_color_xml 파일 -> 선택되면 글자 파랑색 x 이면 글자 검정색으로 설정하는 파일
     private fun setBottomNavigation() {
         val bottomNavigationView = binding.bottomNav // 바텀네비게이션 뷰 변수에 설정 (뷰 바인딩)
         bottomNavigationView.itemIconTintList = null // 바텀네비게이션 뷰 스타일 x -> 클릭시 클릭이미지, 색으로 변하게 하기 위해
@@ -203,6 +201,94 @@ class MainActivity : AppCompatActivity() {
         binding.mainMiniPlayerTitleTv.text = title ?: song.title
         binding.mainMiniPlayerSingerTv.text = singer ?: song.singer
         binding.mainSongProgressSb.progress = (song.second * 100000) / song.playTime
+    }
+
+
+    private fun inputDummySongs() {
+        val songDB = SongDatabase.getInstance(this)!!
+        val songs = songDB.songDao().getSongs()
+
+        if (songs.isNotEmpty()) return
+
+        songDB.songDao().insert(
+            Song(
+                "Lilac",
+                "아이유 (IU)",
+                0,
+                200,
+                false,
+                "music_lilac",
+                R.drawable.img_album_exp2,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Flu",
+                "아이유 (IU)",
+                0,
+                200,
+                false,
+                "music_flu",
+                R.drawable.img_album_exp2,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Butter",
+                "방탄소년단 (BTS)",
+                0,
+                190,
+                false,
+                "music_butter",
+                R.drawable.img_album_exp,
+                false,
+            )
+        )
+
+        songDB.songDao().insert(
+            Song(
+                "Next Level",
+                "에스파 (AESPA)",
+                0,
+                210,
+                false,
+                "music_next",
+                R.drawable.img_album_exp3,
+                false,
+            )
+        )
+
+
+        songDB.songDao().insert(
+            Song(
+                "Boy with Luv",
+                "music_boy",
+                0,
+                230,
+                false,
+                "music_lilac",
+                R.drawable.img_album_exp4,
+                false,
+            )
+        )
+
+
+        songDB.songDao().insert(
+            Song(
+                "BBoom BBoom",
+                "모모랜드 (MOMOLAND)",
+                0,
+                240,
+                false,
+                "music_bboom",
+                R.drawable.img_album_exp5,
+                false,
+            )
+        )
     }
 
     override fun onStart() {
