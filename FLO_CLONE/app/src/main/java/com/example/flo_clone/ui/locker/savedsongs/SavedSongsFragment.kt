@@ -9,44 +9,49 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo_clone.R
 import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.FragmentSavedSongsBinding
+import com.example.flo_clone.room.SongDatabase
+import com.example.flo_clone.room.SongEntity
 
 class SavedSongsFragment : Fragment() {
 
     lateinit var binding: FragmentSavedSongsBinding
+    lateinit var songDB: SongDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSavedSongsBinding.inflate(layoutInflater)
+
+        songDB = SongDatabase.getInstance(requireContext())!!
+
         setRecyclerView()
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        setRecyclerView()
+    }
+
     private fun setRecyclerView() {
 
-        // 리사이클러뷰 생성 및 바인딩
-        val savedSongsPlayListRv = binding.savedSongsPlayListRv
+        // 리사이클러뷰 생성
+        binding.savedSongsPlayListRv.layoutManager = LinearLayoutManager(
+            context, LinearLayoutManager.VERTICAL, false
+        )
 
-        // 리사이클러뷰에 넣을 데이터 리스트
-        val itemList = ArrayList<SavedSongs>()
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"하루끝","아이유"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"금요일에 만나요","아이유"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"좋은날","아이유"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"너랑나","아이유"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"선물","멜로망스"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"Bad Boy","레드벨벳"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"빨간맛","레드벨벳"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"Psycho","레드벨벳"))
-        itemList.add(SavedSongs(R.drawable.img_album_exp2,"Rookie","레드벨벳"))
+        // 어댑터 생성 및 바인딩
+        val savedSongAdapter = SavedSongAdapter()
+        binding.savedSongsPlayListRv.adapter = savedSongAdapter
 
-        // 어댑터 생성 (데이터 넣어줌)
-        val savedSongAdapter = SavedSongAdapter(itemList)
-        savedSongAdapter.notifyDataSetChanged()
+        savedSongAdapter.addSongs(songDB.songDao().getLikedSongs(true) as ArrayList<SongEntity>)
 
         savedSongAdapter.setOnItemClickListener(object : SavedSongAdapter.OnItemClickListener {
             override fun onItemClick() {
@@ -54,8 +59,6 @@ class SavedSongsFragment : Fragment() {
             }
         })
 
-        // 리사이클러뷰와 어댑터 연결
-        savedSongsPlayListRv.adapter = savedSongAdapter
-        savedSongsPlayListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
     }
 }
