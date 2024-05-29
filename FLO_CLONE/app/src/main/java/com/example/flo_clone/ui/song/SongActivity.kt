@@ -171,11 +171,11 @@ class SongActivity : AppCompatActivity() {
             if (!isRepeat) {
                 val color = ContextCompat.getColor(this, R.color.gray_color)
                 binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
-                songEntity.isRepeating = false
+                songs[nowPos].isRepeating = false
             } else {
                 val color = ContextCompat.getColor(this, R.color.blue)
                 binding.nuguBtnRepeatInactiveIb.setColorFilter(color)
-                songEntity.isRepeating = true
+                songs[nowPos].isRepeating = true
             }
         }
 

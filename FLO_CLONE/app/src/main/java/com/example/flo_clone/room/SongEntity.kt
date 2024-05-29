@@ -1,7 +1,6 @@
 package com.example.flo_clone.room
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "SongTable")
