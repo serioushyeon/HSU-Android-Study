@@ -142,7 +142,12 @@ class MainActivity : AppCompatActivity() {
             0, 214, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
+            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
+            editor.putInt("songID", song.id)
+            editor.apply()
 
+            val intent = Intent(this, SongActivity::class.java)
+            startActivity(intent)
         }
     }
 
