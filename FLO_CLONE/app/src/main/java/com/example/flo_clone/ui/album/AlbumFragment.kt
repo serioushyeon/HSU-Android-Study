@@ -55,12 +55,8 @@ class AlbumFragment : Fragment() {
 
 
     private fun setButton() {
-        //뒤로가기 버튼 클릭
-//        binding.btnAlbumBackIb.setOnClickListener {
-//            val intent = Intent(requireContext(), MainActivity::class.java)
-//            startActivity(intent)
-//        }
 
+        // 뒤로가기 버튼 클릭
         binding.btnAlbumBackIb.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, HomeFragment()).commitAllowingStateLoss()
