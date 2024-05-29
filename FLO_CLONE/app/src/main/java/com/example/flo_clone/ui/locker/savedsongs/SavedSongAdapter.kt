@@ -14,11 +14,14 @@ class SavedSongAdapter() :
     RecyclerView.Adapter<SavedSongAdapter.SaveSongsViewHolder>() {
 
     private val songs = ArrayList<SongEntity>()
+    interface MyItemClickListener {
+        fun onRemovedSong(songId: Int)
+    }
 
-    private lateinit var mOnItemClickListener: OnItemClickListener
+    private lateinit var myItemClickListener: MyItemClickListener
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
-        mOnItemClickListener = onItemClickListener
+    fun setMyItemClickListener(itemClickListener: MyItemClickListener){
+        myItemClickListener = itemClickListener
     }
 
     interface OnItemClickListener{
@@ -36,6 +39,10 @@ class SavedSongAdapter() :
 
     override fun onBindViewHolder(holder: SaveSongsViewHolder, position: Int) {
         holder.bind(songs[position])
+        holder.binding.itemOptionImgIv.setOnClickListener {
+            myItemClickListener.onRemovedSong(songs[position].id)
+            removeSong(position)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -57,27 +64,6 @@ class SavedSongAdapter() :
         var img = binding.itemAlbumCoverImgIv
         var title = binding.itemAlbumTitleTv
         var singer = binding.itemAlbumSingerTv
-
-        init {
-            binding.root.setOnClickListener {
-                val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION && mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick()
-                }
-            }
-            deleteItem()
-        }
-
-        fun deleteItem() {
-            val deleteBtn = binding.itemOptionImgIv
-            deleteBtn.setOnClickListener{
-                val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION) {
-                    songs.removeAt(pos)
-                    notifyItemRemoved(pos)
-                }
-            }
-        }
 
         fun bind(songEntity: SongEntity) {
             // 이미지 로딩 라이브러리를 사용하여 이미지 설정

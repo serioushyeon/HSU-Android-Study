@@ -53,9 +53,9 @@ class SavedSongsFragment : Fragment() {
 
         savedSongAdapter.addSongs(songDB.songDao().getLikedSongs(true) as ArrayList<SongEntity>)
 
-        savedSongAdapter.setOnItemClickListener(object : SavedSongAdapter.OnItemClickListener {
-            override fun onItemClick() {
-                // 아이템 클릭 시 수행할 동작
+        savedSongAdapter.setMyItemClickListener(object : SavedSongAdapter.MyItemClickListener {
+            override fun onRemovedSong(songId: Int) {
+                songDB.songDao().updateIsLikeById(false, songId)
             }
         })
 
