@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -118,9 +119,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setStartFragment()
-        setBottomNavigation()
-        changeActivity()
+        inputDummySongs()
+        setStartFragment()      // 시작 프래그먼트 설정 (홈)
+        setBottomNavigation()   // 바텀네비게이션 뷰 설정
+        changeActivity()        // MainPlayer 클릭하면 액티비티 변경
 
         createNotificationChannel(CHANNEL_ID, "Test Channel", "Test Channel Description")
 
@@ -128,10 +130,13 @@ class MainActivity : AppCompatActivity() {
           displayNotification()
         }
     }
+
+    // 토스트 메시지 만드는 함수
     private fun makeToastMsg(msg: String) {
         Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
     }
 
+    // mainPlayer 클릭하면 액티비티 변경하는 함수
     private fun changeActivity() {
         val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
             0, 214, false, "music_lilac")
@@ -150,6 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 처음 시작하는 프래그먼트 설정하는 함수
     private fun setStartFragment() {
         val homeFragment = HomeFragment() // 홈 프래그먼트 생성
 
@@ -204,6 +210,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    // Room Entity에 더미데이터 추가하는 함수
     private fun inputDummySongs() {
         val songDB = SongDatabase.getInstance(this)!!
         val songs = songDB.songDao().getSongs()
@@ -289,6 +296,9 @@ class MainActivity : AppCompatActivity() {
                 false,
             )
         )
+
+        val _songs = songDB.songDao().getSongs()
+        Log.d("DB data", _songs.toString())
     }
 
     override fun onStart() {
