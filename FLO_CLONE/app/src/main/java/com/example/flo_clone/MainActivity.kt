@@ -142,16 +142,7 @@ class MainActivity : AppCompatActivity() {
             0, 214, false, "music_lilac")
 
         binding.mainPlayer.setOnClickListener {
-            val intent = Intent(this, SongActivity::class.java)
-            //intent.putExtra("title", binding.playerTitleTv.text.toString())
-            //intent.putExtra("singer", binding.playerSingerTv.text.toString())
-            intent.putExtra("title", song.title)
-            intent.putExtra("singer", song.singer)
-            intent.putExtra("second", song.second)
-            intent.putExtra("playTime", song.playTime)
-            intent.putExtra("isPlaying", song.isPlaying)
-            intent.putExtra("music", song.music)
-            getResultText.launch(intent) // Song 액티비티를 시작하고 결과 처리 콜백 호출
+
         }
     }
 
@@ -164,8 +155,7 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.frame_layout, homeFragment).commit()
     }
 
-    // 바텀네비게이션 뷰를 설정하는 함수
-    // menu 파일의 home_navigation_menu 파일 사용
+    // 바텀네비게이션 뷰를 설정하는 함수 -> menu 파일의 home_navigation_menu 파일 사용
     private fun setBottomNavigation() {
         val bottomNavigationView = binding.bottomNav // 바텀네비게이션 뷰 변수에 설정 (뷰 바인딩)
         bottomNavigationView.itemIconTintList = null // 바텀네비게이션 뷰 스타일 x -> 클릭시 클릭이미지, 색으로 변하게 하기 위해
@@ -304,15 +294,19 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-        val songJson = sharedPreferences.getString("songData", null)
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        val songId = spf.getInt("songId", 0)
 
-        song = if(songJson == null) {
-            Song("라일락", "아이유(IU)", 0,60, false, "music_lilac")
+        val songDB = SongDatabase.getInstance(this)!!
+
+        // 저장된 song 데이터 없으면 첫 번째 인덱스 가져옴
+        song = if (songId == 0) {
+            songDB.songDao().getSong(1)
         } else {
-            gson.fromJson(songJson, Song::class.java)
+            songDB.songDao().getSong(songId)    // 있으면 songId로 저장된 song 가져옴
         }
 
+        Log.d("song ID", "song ID: ${song.id.toString()}")
         setMiniPlayer(song)
     }
 
