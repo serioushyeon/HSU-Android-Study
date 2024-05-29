@@ -29,6 +29,7 @@ class LockerFragment : Fragment() {
             }
             //tab.customView =tabView
         }.attach()
+
         return binding.root
     }
 }

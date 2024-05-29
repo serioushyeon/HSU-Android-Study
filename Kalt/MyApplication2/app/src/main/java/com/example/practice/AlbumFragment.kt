@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+
 import com.example.practice.databinding.FragmentAlbumBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -48,7 +49,7 @@ class AlbumFragment : Fragment() {
     private fun setinit(album : Album){
         binding.albumMusicTitleTv.text = album.title
         binding.albumSingerNameTv.text = album.singer
-        binding.albumAlbumIv.setImageResource(album.covering!!)
+        binding.albumAlbumIv.setImageResource(album.coverimg!!)
     }
 
 }

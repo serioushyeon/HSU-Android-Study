@@ -5,6 +5,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+
 import com.example.practice.databinding.ActivityHomeFragmentBinding
 import com.google.gson.Gson
 
@@ -27,6 +29,8 @@ class HomeFragment : Fragment() {
     private lateinit var mediaPlayer: MediaPlayer
     private var isPlaying = false
     private lateinit var albumRVAdapter : AlbumRecyclerViewAdapter
+    private lateinit var songDB: SongDatabase
+    private var song: Song = Song()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,25 +38,24 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = ActivityHomeFragmentBinding.inflate(inflater,container,false)
 
-        /*binding.homePannelTodayMusicAlbum1.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm,AlbumFragment())
-                .commitAllowingStateLoss()
-        }*/
-        // 데이터 리스트 생성 더미 데이터
+
         albumdatas.apply {
-            add(Album("Butter","방탄소년단",R.drawable.img_album_exp , arrayListOf(Song("lsl","아이유")),arrayListOf(Music("lsl",R.raw.lilac))))
+            add(Album("Butter","방탄소년단",R.drawable.img_album_exp ))
             add(Album("헤어지자 말해요","박재정",R.drawable.ballad_image1))
             add(Album("라일락","아이유",R.drawable.img_album_exp2))
         }
+        /*songDB = SongDatabase.getInstance(requireContext())!!
+        albumdatas.addAll(songDB.albumDao().getAlbums()) // songDB에서 album list를 가져옵니다.
+        Log.d("albumlist", albumdatas.toString())*/
 
-
+        //서비스
         binding.serviceStartButton.setOnClickListener{
             serviceStart(it)
          }
         binding.serviceEndButton.setOnClickListener{
             serviceStop(it)
         }
+
          albumRVAdapter = AlbumRecyclerViewAdapter(albumdatas, object : AlbumRecyclerViewAdapter.MyItemClickListener {
             override fun onitemClick(album: Album) {
                 chagedeAlbimFragement(album)
@@ -66,6 +69,8 @@ class HomeFragment : Fragment() {
             }
         },requireContext())
         binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter
+
+        //banner
         val bannerAdapter = bannerVpAdapter(this)
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
@@ -73,6 +78,8 @@ class HomeFragment : Fragment() {
         binding.homeViewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         return binding.root
     }
+
+
     fun serviceStart(view: View){
         val intent = Intent(activity,Service::class.java)
         ContextCompat.startForegroundService(requireActivity(),intent)
@@ -93,9 +100,7 @@ class HomeFragment : Fragment() {
             .commitAllowingStateLoss()
     }
     private fun playSong(song: Song, position: Int) {
-        if (mediaPlayer != null) {
-            mediaPlayer?.release()
-        }
+        mediaPlayer?.release()
 
         mediaPlayer = MediaPlayer.create(context, R.raw.lilac)
         mediaPlayer?.start()
