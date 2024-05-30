@@ -57,24 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/itme_song_mixoff_tg"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/btn_toggle_off" />
 
-        <ImageView
-            android:id="@+id/itme_song_mixon_tg"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/btn_toggle_on"
-            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/item_song_play_iv"
