@@ -93,6 +93,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/btn_miniplayer_play" />
+            <ImageView
+                android:id="@+id/main_pause_music_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/btn_miniplay_mvpause"
+                android:visibility="gone"
+                />
+
 
             <ImageView
                 android:id="@+id/main_next_music_btn"
