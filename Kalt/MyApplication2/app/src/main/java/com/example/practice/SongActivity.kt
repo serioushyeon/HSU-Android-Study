@@ -1,5 +1,7 @@
 package com.example.practice
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -14,27 +16,20 @@ import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {
     lateinit var binding : ActivitySongBinding
-    lateinit var song : Song
     lateinit var timer : Timer
     private var mediaPlayer : MediaPlayer? = null
     private var gson: Gson = Gson()
     private var checking : Boolean  = false
+    val songs = arrayListOf<Song>()
+    lateinit var songDB: SongDatabase
+    var nowPos =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivitySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        initPlayList()
         initsong()
-        setPlayer(song)
-        binding.songDown.setOnClickListener {
-            finish()
-        }
-        binding.songPlayIv.setOnClickListener {
-            setplayerstatus(true)
-        }
-        binding.songPauseIv.setOnClickListener {
-            setplayerstatus(false)
-        }
+        initclicklistener()
         binding.repeatInactiveIv.setOnClickListener {
             binding.repeatInactiveIv.visibility = View.GONE
             binding.repeatInactiveIv2.visibility = View.VISIBLE
@@ -53,16 +48,20 @@ class SongActivity : AppCompatActivity() {
         }
 
     }
+    private fun loadSongId(): Int {
+        val sharedPreferences = getSharedPreferences("song", Context.MODE_PRIVATE)
+        return sharedPreferences.getInt("songId", -1)  // -1은 기본값으로, ID가 없을 경우를 처리
+    }
     // 사용자가 포커스를 잃었을 때 음악이 중지
     //json - 자바 객체로 -> json 으로 변환을 간단하게 해준다.
     override fun onPause() {
         super.onPause()
         setplayerstatus(false)
-        song.second = ((binding.songprogressSB.progress *song.playTime)/100)/1000
+        songs[nowPos].second = ((binding.songprogressSB.progress *songs[nowPos].playTime)/100)/1000
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)// 앱이 종료되도 데이터를 다시 사용할 수 있다.
         val editor = sharedPreferences.edit() //에디터
-        val songgson = gson.toJson(song)
-        editor.putString("songdata",songgson)
+
+        editor.putInt("songId",songs[nowPos].id)
 
         editor.apply() //꼭 해줘야 한다.
     }
@@ -73,34 +72,101 @@ class SongActivity : AppCompatActivity() {
         mediaPlayer = null
     }
 
-    private fun initsong(){
-        if(intent.hasExtra("title") && intent.hasExtra("singer")){
-            song = Song(
-                intent.getStringExtra("title")!!,
-                intent.getStringExtra("singer")!!,
-                intent.getIntExtra("second",0),
-                intent.getIntExtra("playTime",0),
-                intent.getBooleanExtra("isplaying",false),
-                intent.getStringExtra("music")!!
-            )
+    private fun initPlayList(){
+        songDB = SongDatabase.getInstance(this)!!
+        songs.addAll(songDB.songDao().getSongs())
+    }
+
+    private fun initclicklistener(){
+        binding.songDown.setOnClickListener {
+            finish()
         }
+        binding.songPlayIv.setOnClickListener {
+            setplayerstatus(true)
+        }
+        binding.songPauseIv.setOnClickListener {
+            setplayerstatus(false)
+        }
+        binding.songNext.setOnClickListener{
+            moveSong(1)
+        }
+        binding.songPriveous.setOnClickListener{
+            moveSong(-1)
+        }
+        binding.albumLikeIv.setOnClickListener{
+
+            setlike(songs[nowPos].islike)
+        }
+
+    }
+    private fun setlike(islike : Boolean){
+        songs[nowPos].islike = !islike
+        songDB.songDao().updateislikeByid(!islike,songs[nowPos].id)
+        if(!islike){
+            Toast.makeText(this," 좋아요!!",Toast.LENGTH_SHORT).show()
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        }
+        else{
+            Toast.makeText(this," 싫아요!!",Toast.LENGTH_SHORT).show()
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
+    }
+
+    private fun initsong(){
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        val songId = spf.getInt("songId",0)
+        nowPos = getPlayingSongPosition(songId)
+
+        Log.d("now Song ID",songs[nowPos].id.toString())
         startTimer()
         if(checking==true){
             startTimer()
         }
+        setPlayer(songs[nowPos])
+    }
+    private fun getPlayingSongPosition(songId : Int) : Int{
+        for(i in 0 until songs.size){
+            if(songs[i].id ==songId){
+                return i
+            }
+        }
+        return 0
+    }
+    private fun moveSong(direct : Int){
+        if(nowPos +direct <0){
+            Toast.makeText(this,"first song",Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(nowPos +direct>= songs.size){
+            Toast.makeText(this,"last song",Toast.LENGTH_SHORT).show()
+            return
+        }
+        nowPos += direct
+        timer.interrupt()
+        startTimer()
+        mediaPlayer?.release() //미디어플레이어가 갖고 있던 리소스 해제 // 미디어 플레이어 재시작
+        mediaPlayer = null
+        setPlayer(songs[nowPos])
     }
     private fun setPlayer(song : Song){
-        binding.songMusicTitleTv.text = intent.getStringExtra("title")
-        binding.songMusicSingerTv.text = intent.getStringExtra("singer")
+        binding.songMusicTitleTv.text = song.title
+        binding.songMusicSingerTv.text = song.singer
         binding.songStarttimeIv.text = String.format("%02d:%02d",song.second/60,song.second%60)
         binding.songEndtimeIv.text = String.format("%02d:%02d",song.playTime/60,song.playTime%60)
+        binding.AlbumIv.setImageResource(song.coverImg!!)
         binding.songprogressSB.progress = ((song.second * 3000.0 / song.playTime).toInt())
         val music = resources.getIdentifier(song.music,"raw",this.packageName)
         mediaPlayer = MediaPlayer.create(this,music)
+        if(song.islike){
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        }
+        else{
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
         setplayerstatus(song.isplaying)
     }
     private fun setplayerstatus(isplaying:Boolean){
-        song.isplaying = isplaying
+        songs[nowPos].isplaying = isplaying
         timer.isplaying = isplaying
 
 
@@ -119,7 +185,7 @@ class SongActivity : AppCompatActivity() {
         }
     }
     private fun startTimer(){
-        timer = Timer(song.playTime,song.isplaying)
+        timer = Timer(songs[nowPos].playTime,songs[nowPos].isplaying)
         timer.start()
     }
 
