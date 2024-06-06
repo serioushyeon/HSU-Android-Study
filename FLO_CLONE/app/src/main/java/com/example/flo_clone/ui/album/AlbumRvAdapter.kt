@@ -1,14 +1,13 @@
 package com.example.flo_clone.ui.album
 
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flo_clone.MainActivity
-import com.example.flo_clone.data.Album
+import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.ItemAlbumBinding
-class AlbumRvAdapter (val albumList: ArrayList<Album>) :
+import com.example.flo_clone.room.AlbumEntity
+
+class AlbumRvAdapter (val albumList: ArrayList<AlbumEntity>) :
     RecyclerView.Adapter<AlbumRvAdapter.AlbumViewHolder>() {
 
     private lateinit var mOnItemClickListener: OnItemClickListener
@@ -18,7 +17,8 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
     }
 
     interface OnItemClickListener{
-        fun onItemClick(album: Album)
+        fun onItemClick(album: AlbumEntity)
+        fun onPlayBtnClick(item: AlbumEntity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
@@ -35,30 +35,16 @@ class AlbumRvAdapter (val albumList: ArrayList<Album>) :
         holder.itemView.setOnClickListener {
             mOnItemClickListener.onItemClick(albumList[position])
         }
+        holder.binding.itemAlbumPlayImgIv.setOnClickListener {
+            mOnItemClickListener.onPlayBtnClick(albumList[position])
+        }
     }
 
     inner class AlbumViewHolder(val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            sendToMiniPlayer()
-        }
-
-        // 플레이 버튼 클릭하면 메인 액티비티로 제목, 가수명 전달 (인텐트 사용)
-        private fun sendToMiniPlayer() {
-            binding.itemAlbumPlayImgIv.setOnClickListener {
-                val intent = Intent(binding.root.context, MainActivity::class.java).apply {
-                    putExtra("album_title", albumList[adapterPosition].title)
-                    putExtra("album_singer", albumList[adapterPosition].singer)
-                    // 다른 필요한 정보들도 필요한 경우 추가
-                }
-                binding.root.context.startActivity(intent)
-            }
-        }
-
-        fun bind(album: Album) {
-            binding.itemAlbumTitleTv.text = album.title
-            binding.itemAlbumSingerTv.text = album.singer
-            binding.itemAlbumCoverImgIv.setImageResource(album.converImg!!)
+        fun bind(albumEntity: AlbumEntity) {
+            binding.itemAlbumTitleTv.text = albumEntity.title
+            binding.itemAlbumSingerTv.text = albumEntity.singer
+            binding.itemAlbumCoverImgIv.setImageResource(albumEntity.coverImg!!)
         }
     }
 }

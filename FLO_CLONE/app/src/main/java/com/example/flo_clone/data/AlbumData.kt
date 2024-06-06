@@ -1,6 +1,6 @@
 package com.example.flo_clone.data
 
-data class Album (
+data class AlbumData (
     var title: String? = "",
     var singer: String? = "",
     var converImg: Int? = null,

@@ -1,5 +1,6 @@
 package com.example.flo_clone.ui.locker.savedsongs
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,14 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.ItemSavedSongBinding
+import com.example.flo_clone.room.SongEntity
 
-class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
+class SavedSongAdapter() :
     RecyclerView.Adapter<SavedSongAdapter.SaveSongsViewHolder>() {
 
-    private lateinit var mOnItemClickListener: OnItemClickListener
+    private val songs = ArrayList<SongEntity>()
+    interface MyItemClickListener {
+        fun onRemovedSong(songId: Int)
+    }
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
-        mOnItemClickListener = onItemClickListener
+    private lateinit var myItemClickListener: MyItemClickListener
+
+    fun setMyItemClickListener(itemClickListener: MyItemClickListener){
+        myItemClickListener = itemClickListener
     }
 
     interface OnItemClickListener{
@@ -27,47 +34,45 @@ class SavedSongAdapter(val itemList: ArrayList<SavedSongs>) :
     }
 
     override fun getItemCount(): Int {
-        return itemList.count()
+        return songs.count()
     }
 
     override fun onBindViewHolder(holder: SaveSongsViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        holder.bind(songs[position])
+        holder.binding.itemOptionImgIv.setOnClickListener {
+            myItemClickListener.onRemovedSong(songs[position].id)
+            removeSong(position)
+        }
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addSongs(songs: ArrayList<SongEntity>) {
+        this.songs.clear()
+        this.songs.addAll(songs)
+
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun removeSong(position: Int){
+        songs.removeAt(position)
+        notifyDataSetChanged()
+    }
+
 
     inner class SaveSongsViewHolder(val binding: ItemSavedSongBinding) : RecyclerView.ViewHolder(binding.root) {
         var img = binding.itemAlbumCoverImgIv
         var title = binding.itemAlbumTitleTv
         var singer = binding.itemAlbumSingerTv
 
-        init {
-            binding.root.setOnClickListener {
-                val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION && mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick()
-                }
-            }
-            deleteItem()
-        }
-
-        fun deleteItem() {
-            val deleteBtn = binding.itemOptionImgIv
-            deleteBtn.setOnClickListener{
-                val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION) {
-                    itemList.removeAt(pos)
-                    notifyItemRemoved(pos)
-                }
-            }
-        }
-
-        fun bind(savedSong: SavedSongs) {
+        fun bind(songEntity: SongEntity) {
             // 이미지 로딩 라이브러리를 사용하여 이미지 설정
             Glide.with(itemView.context)
-                .load(savedSong.img)
+                .load(songEntity.coverImg)
                 .into(img)
 
-            title.text = savedSong.title
-            singer.text = savedSong.singer
+            title.text = songEntity.title
+            singer.text = songEntity.singer
         }
     }
 }
