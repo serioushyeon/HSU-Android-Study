@@ -42,15 +42,7 @@ class AlbumFragment : Fragment() {
             tab, position ->
             tab.text = information[position]
         }.attach()
-        /*binding.songLalacLayout.setOnClickListener {
-            Toast.makeText(activity, "LILAC", Toast.LENGTH_SHORT).show()
-        }
-        binding.songFluLayout.setOnClickListener {
-            Toast.makeText(activity, "Flu", Toast.LENGTH_SHORT).show()
-        }
-        binding.songCoinLayout.setOnClickListener {
-            Toast.makeText(activity, "Coin", Toast.LENGTH_SHORT).show()
-        }*/
+
         binding.albumLikeIv.setOnClickListener {
             setLikeStatus(false)
         }

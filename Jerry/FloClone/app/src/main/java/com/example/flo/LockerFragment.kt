@@ -23,6 +23,12 @@ class LockerFragment : Fragment() {
     ): View? {
         binding = FragmentLockerBinding.inflate(inflater, container, false)
 
+        val bottomSheetFragment = BottomSheetFragment()
+        binding.lockerSelectAllTv.setOnClickListener {
+            bottomSheetFragment.show(requireActivity().supportFragmentManager, "BottomSheetDialog")
+
+        }
+
         val lockerAdapter = LockerVPAdapter(this)
         binding.songStorageBoxVp.adapter = lockerAdapter
 
