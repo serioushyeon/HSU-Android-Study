@@ -6,10 +6,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flo.databinding.ItemSongBinding
 
-class SavedSongRVAdapter(private val songs: java.util.ArrayList<Song>) :
+class SavedSongRVAdapter() :
     RecyclerView.Adapter<SavedSongRVAdapter.ViewHolder>() {
-    //private val songs = ArrayList<Song>()
+    private val songs = ArrayList<Song>()
+    interface MyItemClickListener{
+        fun onRemoveSong(songId: Int)
+    }
+    private lateinit var mItemClickListener : MyItemClickListener
 
+    fun setMyItemClickListener(itemClickListener: MyItemClickListener){
+        mItemClickListener = itemClickListener
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): SavedSongRVAdapter.ViewHolder {
         val binding: ItemSongBinding = ItemSongBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
@@ -20,6 +27,7 @@ class SavedSongRVAdapter(private val songs: java.util.ArrayList<Song>) :
     override fun onBindViewHolder(holder: SavedSongRVAdapter.ViewHolder, position: Int) {
         holder.bind(songs[position])
         holder.binding.itemSongMoreIv.setOnClickListener {
+            mItemClickListener.onRemoveSong(songs[position].id)
             removeSong(position)
         }
     }
