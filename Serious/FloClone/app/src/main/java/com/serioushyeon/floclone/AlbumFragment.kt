@@ -10,8 +10,10 @@ import com.google.gson.Gson
 import com.serioushyeon.floclone.databinding.FragmentAlbumBinding
 
 class AlbumFragment : Fragment() {
-    lateinit var binding : FragmentAlbumBinding
+
+    lateinit var binding: FragmentAlbumBinding
     private var gson: Gson = Gson()
+
     private val information = arrayListOf("수록곡", "상세정보", "영상")
 
     override fun onCreateView(
@@ -23,9 +25,10 @@ class AlbumFragment : Fragment() {
 
         // Home 에서 넘어온 데이터 받아오기
         val albumJson = arguments?.getString("album")
-        val album = gson.fromJson(albumJson, Song::class.java)
+        val album = gson.fromJson(albumJson, Album::class.java)
         // Home에서 넘어온 데이터를 반영
         setInit(album)
+
         binding.albumBackIv.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, HomeFragment())
@@ -39,28 +42,13 @@ class AlbumFragment : Fragment() {
             tab.text = information[position]
         }.attach()
 
-        binding.albumLikeIv.setOnClickListener {
-            setLikeStatus(true)
-        }
-        binding.albumLikeOnIv.setOnClickListener {
-            setLikeStatus(false)
-        }
         return binding.root
     }
-    private fun setInit(album: Song) {
-        binding.albumAlbumIv.setImageResource(album.img)
-        binding.albumMusicTitleTv.text = album.title
-        binding.albumSingerNameTv.text = album.singer
+
+    private fun setInit(album: Album) {
+        binding.albumAlbumIv.setImageResource(album.coverImg!!)
+        binding.albumMusicTitleTv.text = album.title.toString()
+        binding.albumSingerNameTv.text = album.singer.toString()
     }
 
-    fun setLikeStatus(isLike : Boolean){
-        if(isLike){
-            binding.albumLikeOnIv.visibility = View.VISIBLE
-            binding.albumLikeIv.visibility = View.GONE
-        }
-        else {
-            binding.albumLikeOnIv.visibility = View.GONE
-            binding.albumLikeIv.visibility = View.VISIBLE
-        }
-    }
 }

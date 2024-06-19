@@ -19,7 +19,8 @@ import com.serioushyeon.floclone.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
-
+    private var albumDatas = ArrayList<Album>()
+    private lateinit var songDB: SongDatabase
     var currentPage = 0
 
     override fun onCreateView(
@@ -28,7 +29,24 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        songDB = SongDatabase.getInstance(requireContext())!!
+        albumDatas.addAll(songDB.albumDao().getAlbums()) // songDB에서 album list를 가져옵니다.
+        Log.d("albumlist", albumDatas.toString())
 
+        // 더미데이터랑 Adapter 연결
+        val albumRVAdapter = AlbumRVAdapter(albumDatas)
+        // 리사이클러뷰에 어댑터를 연결
+        binding.homeTodayMusicListRv.adapter = albumRVAdapter
+        binding.homeTodayMusicListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        albumRVAdapter.setMyItemClickListener(object : AlbumRVAdapter.MyItemClickListener{
+            override fun onItemClick(album: Album) {
+                changeAlbumFragment(album)
+            }
+            override fun onRemoveAlbum(position: Int) {
+                albumRVAdapter.removeItem(position)
+            }
+        })
         val bannerAdapter = BannerVPAdapter(this)
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
         bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
@@ -41,12 +59,12 @@ class HomeFragment : Fragment() {
 
         val pannelAdapter = PannelVPAdapter(this)
 
-        val song1 = Song("숲", "최유리", R.drawable.img_pannel_album1, 0, 60, false, "forest", false)
-        val song2 = Song("Lucky Girl Syndrome", "아일릿(ILLIT)", R.drawable.img_pannel_album2, 0, 60, false, "luckygirlsyndrome", false)
-        val song3 = Song("bad idea right?", "Olivia Rodrigo", R.drawable.img_pannel_album3, 0, 60, false, "badidearight", false)
-        val song4 = Song("These Tears", "Andy Grammer", R.drawable.img_pannel_album4, 0, 60, false, "thesetears", false)
-        val song5 = Song("ETA", "NewJeans", R.drawable.img_pannel_album5, 0, 60, false, "eta", false)
-        val song6 = Song("네가 좋은 사람일 수는 없을까", "윤지영", R.drawable.img_pannel_album6, 0, 60, false, "goodperson", false)
+        val song1 = Song("숲", "최유리", R.drawable.img_pannel_album1, 0, 60, false, "forest", false, false)
+        val song2 = Song("Lucky Girl Syndrome", "아일릿(ILLIT)", R.drawable.img_pannel_album2, 0, 60, false, "luckygirlsyndrome", false, false)
+        val song3 = Song("bad idea right?", "Olivia Rodrigo", R.drawable.img_pannel_album3, 0, 60, false, "badidearight", false, false)
+        val song4 = Song("These Tears", "Andy Grammer", R.drawable.img_pannel_album4, 0, 60, false, "thesetears", false, false)
+        val song5 = Song("ETA", "NewJeans", R.drawable.img_pannel_album5, 0, 60, false, "eta", false, false)
+        val song6 = Song("네가 좋은 사람일 수는 없을까", "윤지영", R.drawable.img_pannel_album6, 0, 60, false, "goodperson", false, false)
 
         var pannelData1 = PannelData("싱그러운 봄비가 내리고", "총 80곡 2024.04.01", R.drawable.img_pannel_background1, song1, song1 )
         var pannelData2 = PannelData("브런치 카페에서", "총 54곡 2024.04.02", R.drawable.img_pannel_background2, song2, song2 )
@@ -64,32 +82,6 @@ class HomeFragment : Fragment() {
         binding.homePannelBackgroundVp.adapter = pannelAdapter
         binding.homePannelBackgroundVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
-        val recyclerView: RecyclerView = binding.homeTodayMusicListRv
-        val items = ArrayList<Song>()
-        items.apply {
-            add(song1)
-            add(song2)
-            add(song3)
-            add(song4)
-            add(song5)
-            add(song6)
-        }
-        val adapter = HomeTodayAlbumListAdapter(items)
-        adapter.setMyItemClickListener(object : HomeTodayAlbumListAdapter.MyItemClickListener{
-            override fun onItemClick(album: Song) {
-                changeAlbumFragment(album)
-            }
-            override fun onRemoveAlbum(position: Int) {
-                adapter.removeItem(position)
-            }
-            override fun onPlayButtonClick(album: Song) {
-                album.isPlaying = true
-                (context as MainActivity).setMiniPlayer(album)
-            }
-        })
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter
-
         val pannelIndicator = binding.homePannelIndicator
         pannelIndicator.setViewPager(binding.homePannelBackgroundVp)
 
@@ -99,7 +91,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun changeAlbumFragment(album: Song) {
+    private fun changeAlbumFragment(album: Album) {
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, AlbumFragment().apply {
                 arguments = Bundle().apply {
