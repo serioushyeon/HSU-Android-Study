@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-kapt")
 }
 
 android {
@@ -75,5 +76,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation ("me.relex:circleindicator:2.1.6")
-    implementation ("com.google.code.gson:gson:2.8.5")
+    implementation("com.google.code.gson:gson:2.8.7")
+
+    // Adding RoomDB dependencies
+    implementation("androidx.room:room-ktx:2.4.1")
+    implementation("androidx.room:room-runtime:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
 }

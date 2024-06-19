@@ -11,18 +11,17 @@ import com.serioushyeon.floclone.databinding.FragmentLockerBinding
 class LockerFragment : Fragment() {
 
     lateinit var binding: FragmentLockerBinding
-
     private val information = arrayListOf("저장한 곡", "음악파일")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLockerBinding.inflate(inflater, container, false)
 
-        val LoeckAdapter = LockerVPAdapter(this)
-        binding.lockerContentVp.adapter = LoeckAdapter
+        val lockerAdapter = LockerVPAdapter(this)
+        binding.lockerContentVp.adapter = lockerAdapter
         TabLayoutMediator(binding.lockerContentTb, binding.lockerContentVp){
                 tab, position ->
             tab.text = information[position]
@@ -30,4 +29,5 @@ class LockerFragment : Fragment() {
 
         return binding.root
     }
+
 }
