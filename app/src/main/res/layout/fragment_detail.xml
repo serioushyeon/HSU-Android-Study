@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/detail_albumtitle_tv"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="앨범명"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:text="SUPER REAL ME" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/detail_albumtitle_tv2"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="아티스트"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:text="아일릿(ILLIT)" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/detail_albumtitle_tv3"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="발매사"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:text="(주)지니뮤직" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/detail_albumtitle_tv4"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="기획사"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:text="빌리프랩" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/detail_albumtitle_tv5"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:text="앨범 소개"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="‘하이브 막내딸’ 아일릿, 3월 25일 첫 번째 미니 앨범 ‘SUPER REAL ME’로 데뷔!
+엉뚱•발랄•자유로움 아일릿…무엇이든 될 수 있는 무한 가능성의 소녀들
+‘눈 앞에 최선을, 나머지는 되는 대로’, 진짜 ‘나’의 이야기로 전속력으로 달려가는 아일릿
+‘리얼 10대 감성’ 아일릿 시작부터 다르다! 방시혁 프로듀서x10대 프로듀서 만남
+
+‘하이브 막내딸’ 아일릿(ILLIT)이 3월 25일 미니 1집 ‘SUPER REAL ME’를 발표하고 가요계에 첫발을 내디뎠다. 이들은 5세대 걸그룹의 시작점으로, ‘내가 바라보는 세상’을 리얼 10대의 문법으로 노래한다." />
+
+
+
+
+</LinearLayout>
