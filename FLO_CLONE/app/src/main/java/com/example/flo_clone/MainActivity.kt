@@ -148,11 +148,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
     }
 
-    // mainPlayer 클릭하면 액티비티 변경하는 함수
+    // mainPlayer 클릭하면 액티비티 변경하는 함수 (SongActivity로 데이터 연동)
     private fun changeActivity() {
-//        val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
-//            0, 214, false, "music_lilac")
-
         binding.mainPlayer.setOnClickListener {
             val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
             editor.putInt("songID", song.id)
@@ -290,7 +287,7 @@ class MainActivity : AppCompatActivity() {
                 "Boy with Luv",
                 "music_boy",
                 0,
-                230,
+                10,
                 false,
                 "music_lilac",
                 false,

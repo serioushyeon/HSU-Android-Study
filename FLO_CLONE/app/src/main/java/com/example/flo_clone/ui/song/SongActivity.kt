@@ -22,7 +22,6 @@ class SongActivity : AppCompatActivity() {
     private lateinit var songEntity: SongEntity
     private lateinit var timer: Timer
     private var mediaPlayer: MediaPlayer? = null
-    private var gson: Gson = Gson()
 
     private val songs = arrayListOf<SongEntity>()
     private lateinit var songDB: SongDatabase
@@ -162,12 +161,17 @@ class SongActivity : AppCompatActivity() {
 
         // 이전 곡 재생
         binding.songPreviousIv.setOnClickListener{
-            moveSong(+1)
+            if (nowPos == 5) moveSong(-5)
+            else moveSong(+1)
         }
 
         // 다음 곡 재생
         binding.songNextIv.setOnClickListener{
-            moveSong(-1)
+            if (nowPos == 0) {
+                moveSong(+5)
+            } else {
+                moveSong(-1)
+            }
         }
 
         // 반복 재생
@@ -243,7 +247,7 @@ class SongActivity : AppCompatActivity() {
                 while (true) {
 
                     if (second >= playTime) {
-                        if (songEntity.isRepeating) {
+                        if (songs[nowPos].isRepeating) {
                             mills = 0f
                             second = 0
                             mediaPlayer?.seekTo(0)
