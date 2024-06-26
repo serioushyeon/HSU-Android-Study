@@ -174,8 +174,8 @@ class MainActivity : AppCompatActivity() {
 
     // 바텀네비게이션 뷰를 설정하는 함수 -> menu 파일의 home_navigation_menu 파일 사용
     private fun setBottomNavigation() {
-        val bottomNavigationView = binding.bottomNav // 바텀네비게이션 뷰 변수에 설정 (뷰 바인딩)
-        bottomNavigationView.itemIconTintList = null // 바텀네비게이션 뷰 스타일 x -> 클릭시 클릭이미지, 색으로 변하게 하기 위해
+        val bottomNavigationView = binding.bottomNav
+        bottomNavigationView.itemIconTintList = null
 
         // 바텀 네비게이션 뷰의 아이템 선택 리스너
         bottomNavigationView.setOnItemSelectedListener {

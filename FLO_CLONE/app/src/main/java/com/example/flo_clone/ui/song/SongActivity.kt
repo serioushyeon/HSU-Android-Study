@@ -1,6 +1,7 @@
 package com.example.flo_clone.ui.song
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +39,11 @@ class SongActivity : AppCompatActivity() {
         //setPlayer(songs[nowPos])
 
         setPlayerStatus(isPlaying = false)
+    }
+
+    // Toast 메시지 만드는 함수
+    private fun makeToastMsg(context: Context, msg: String) {
+        val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     // 노래 리스트에 추가
@@ -121,8 +127,10 @@ class SongActivity : AppCompatActivity() {
         // 뷰 렌더링
         if (!isLike) {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+            makeToastMsg(this@SongActivity, "좋아요 한 곡에 담겼습니다.")
         } else {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+            makeToastMsg(this@SongActivity, "좋아요 한 곡이 취소되었습니다.")
         }
     }
 
