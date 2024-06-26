@@ -19,6 +19,9 @@ class BottomSheetFragment: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
+
+        setSongDataBase()
+        setButton()
         return binding.root
     }
 
@@ -26,7 +29,11 @@ class BottomSheetFragment: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun setButton() {
+    private fun setSongDataBase() {
+        songDB = SongDatabase.getInstance(requireContext())!!
+    }
+
+    private fun setButton() {
         binding.listenContainer.setOnClickListener{
 
         }
@@ -40,7 +47,8 @@ class BottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         binding.deleteSongContainer.setOnClickListener{
-
+            songDB.songDao().updateIsLikeToFalse()
+            this.dismiss()
         }
     }
 }

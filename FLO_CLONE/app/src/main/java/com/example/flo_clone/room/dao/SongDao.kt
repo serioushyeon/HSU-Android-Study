@@ -30,4 +30,8 @@ interface SongDao {
     @Query("SELECT * FROM SongTable WHERE isLike= :isLike")
     fun getLikedSongs(isLike: Boolean): List<SongEntity>
 
+    // 좋아요 = true 인 모든 노래 좋아요 false로 변경
+    @Query("UPDATE SongTable SET isLike = 0 WHERE isLike = 1")
+    fun updateIsLikeToFalse()
+
 }

@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class SavedSongsFragment : Fragment() {
 
     lateinit var binding: FragmentSavedSongsBinding
+    lateinit var savedSongAdapter: SavedSongAdapter
     lateinit var songDB: SongDatabase
 
     private lateinit var bottomSheetFragment: BottomSheetFragment
@@ -61,12 +62,13 @@ class SavedSongsFragment : Fragment() {
                 binding.savedSongsSelectSongTv.text = "선택해제"
                 setBottomSheetFragment()
                 bottomSheetFragment.show(this@SavedSongsFragment.parentFragmentManager, "BottomSheetDialog")
+                savedSongAdapter.notifyDataSetChanged()
                 isSelect = true
             }
             else {
                 binding.savedSongsSelectSongImgIv.setColorFilter(Color.BLACK)
                 binding.savedSongsSelectSongTv.setTextColor(Color.BLACK)
-                binding.savedSongsSelectSongTv.text = "전체듣기"
+                binding.savedSongsSelectSongTv.text = "전체선택"
                 isSelect = false
                 bottomSheetFragment.dismiss()
             }
@@ -82,7 +84,7 @@ class SavedSongsFragment : Fragment() {
         )
 
         // 어댑터 생성 및 바인딩
-        val savedSongAdapter = SavedSongAdapter()
+        savedSongAdapter = SavedSongAdapter()
         binding.savedSongsPlayListRv.adapter = savedSongAdapter
 
         savedSongAdapter.addSongs(songDB.songDao().getLikedSongs(true) as ArrayList<SongEntity>)
