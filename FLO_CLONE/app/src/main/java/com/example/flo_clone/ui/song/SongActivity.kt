@@ -266,6 +266,8 @@ class SongActivity : AppCompatActivity() {
                             binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
                         }
                         if (mills % 1000 == 0f) {
+                            second = (mills / 1000).toInt() // 초 값 업데이트
+                            songs[nowPos].second = second
                             runOnUiThread {
                                 binding.startTimerTv.text = String.format("%02d:%02d", songs[nowPos].second / 60, songs[nowPos].second % 60)
                             }
