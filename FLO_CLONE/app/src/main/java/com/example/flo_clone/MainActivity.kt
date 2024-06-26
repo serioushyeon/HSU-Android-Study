@@ -285,11 +285,11 @@ class MainActivity : AppCompatActivity() {
         songDB.songDao().insert(
             SongEntity(
                 "Boy with Luv",
-                "music_boy",
+                "방탄소년단 (BTS)",
                 0,
-                10,
+                11,
                 false,
-                "music_lilac",
+                "music_boy",
                 false,
                 R.drawable.img_album_exp4,
                 false,

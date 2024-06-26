@@ -246,6 +246,9 @@ class SongActivity : AppCompatActivity() {
             try {
                 while (true) {
 
+                    val startTime = System.currentTimeMillis()
+
+                    // 노래 반복
                     if (second >= playTime) {
                         if (songs[nowPos].isRepeating) {
                             mills = 0f
@@ -260,7 +263,8 @@ class SongActivity : AppCompatActivity() {
 
                     if (isPlaying) {
                         sleep(50)
-                        mills += 50
+                        val currentTime = System.currentTimeMillis()
+                        mills += (currentTime - startTime).toFloat()
 
                         runOnUiThread {
                             binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
