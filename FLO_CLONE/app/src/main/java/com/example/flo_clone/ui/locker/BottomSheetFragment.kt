@@ -1,0 +1,46 @@
+package com.example.flo_clone.ui.locker
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.flo_clone.databinding.FragmentBottomSheetBinding
+import com.example.flo_clone.room.database.SongDatabase
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+
+class BottomSheetFragment: BottomSheetDialogFragment() {
+    lateinit var binding: FragmentBottomSheetBinding
+
+    lateinit var songDB: SongDatabase
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun setButton() {
+        binding.listenContainer.setOnClickListener{
+
+        }
+
+        binding.addPlayListContainer.setOnClickListener{
+
+        }
+
+        binding.addListContainer.setOnClickListener{
+
+        }
+
+        binding.deleteSongContainer.setOnClickListener{
+
+        }
+    }
+}
