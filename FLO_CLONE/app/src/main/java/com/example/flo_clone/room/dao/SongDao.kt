@@ -1,10 +1,11 @@
-package com.example.flo_clone.room
+package com.example.flo_clone.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.flo_clone.room.entity.SongEntity
 
 @Dao
 interface SongDao {

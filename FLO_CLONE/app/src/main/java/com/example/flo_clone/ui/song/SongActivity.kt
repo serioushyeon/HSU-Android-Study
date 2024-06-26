@@ -5,16 +5,14 @@ import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
-import com.example.flo_clone.data.Song
 import com.example.flo_clone.databinding.ActivitySongBinding
-import com.example.flo_clone.room.SongDatabase
-import com.example.flo_clone.room.SongEntity
+import com.example.flo_clone.room.database.SongDatabase
+import com.example.flo_clone.room.entity.SongEntity
 import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {

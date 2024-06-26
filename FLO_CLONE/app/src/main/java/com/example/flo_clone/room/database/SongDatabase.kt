@@ -1,9 +1,13 @@
-package com.example.flo_clone.room
+package com.example.flo_clone.room.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.flo_clone.room.dao.AlbumDao
+import com.example.flo_clone.room.dao.SongDao
+import com.example.flo_clone.room.entity.AlbumEntity
+import com.example.flo_clone.room.entity.SongEntity
 
 @Database(entities = [SongEntity::class, AlbumEntity::class], version = 1)
 abstract class SongDatabase: RoomDatabase() {

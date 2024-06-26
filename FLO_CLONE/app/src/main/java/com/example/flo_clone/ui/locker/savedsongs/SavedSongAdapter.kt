@@ -2,13 +2,11 @@ package com.example.flo_clone.ui.locker.savedsongs
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.ItemSavedSongBinding
-import com.example.flo_clone.room.SongEntity
+import com.example.flo_clone.room.entity.SongEntity
 
 class SavedSongAdapter() :
     RecyclerView.Adapter<SavedSongAdapter.SaveSongsViewHolder>() {

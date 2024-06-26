@@ -1,6 +1,5 @@
 package com.example.flo_clone.ui.album
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
-import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.FragmentAlbumBinding
-import com.example.flo_clone.room.AlbumEntity
+import com.example.flo_clone.room.entity.AlbumEntity
 import com.example.flo_clone.ui.home.HomeFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
