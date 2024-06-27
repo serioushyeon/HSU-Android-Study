@@ -33,7 +33,6 @@ class LoginActivity: AppCompatActivity() {
 
         binding.loginLoginBtn.setOnClickListener {
             login()
-            makeToast("로그인에 성공했습니다.")
         }
 
         binding.loginRegisterTv.setOnClickListener {
@@ -63,9 +62,12 @@ class LoginActivity: AppCompatActivity() {
         user?.let {
             Log.d("LOGIN GET USER", "userId: ${user.id}, $user")
             saveJwt(user.id)
+            makeToast("로그인에 성공했습니다.")
             startMainActivity()
+        } ?: run {
+            // 사용자가 존재하지 않는 경우
+            makeToast("회원 정보가 존재하지 않습니다.")
         }
-        //makeToast("회원 정보가 존재하지 않습니다.")
     }
 
     private fun saveJwt(jwt: Int) {
