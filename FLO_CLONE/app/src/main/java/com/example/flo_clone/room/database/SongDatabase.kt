@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.flo_clone.room.dao.AlbumDao
 import com.example.flo_clone.room.dao.SongDao
+import com.example.flo_clone.room.dao.UserDAO
 import com.example.flo_clone.room.entity.AlbumEntity
 import com.example.flo_clone.room.entity.SongEntity
+import com.example.flo_clone.room.entity.UserEntity
 
-@Database(entities = [SongEntity::class, AlbumEntity::class], version = 1)
+@Database(entities = [SongEntity::class, UserEntity::class, AlbumEntity::class], version = 1)
 abstract class SongDatabase: RoomDatabase() {
 
     // DB 다루기 위한 DAO 객체를 반환하는 함수
     abstract fun songDao(): SongDao
+    abstract fun userDao(): UserDAO
     abstract fun albumDao(): AlbumDao
 
     // Singleton 패턴
