@@ -283,13 +283,16 @@ class SongActivity : AppCompatActivity() {
     // 사용자가 포커스를 잃었을 때 음악이 중지
     override fun onPause() {
         super.onPause()
+
         setPlayerStatus(false)
+        songs[nowPos].isPlaying = false
         songs[nowPos].second = ((binding.songProgressSb.progress * songs[nowPos].playTime)/100)/1000
 
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit() // 에디터
 
         editor.putInt("songId", songs[nowPos].id)
+        editor.putInt("songSecond", songs[nowPos].second) // 현재 재생 위치 저장
         editor.apply()
     }
 
