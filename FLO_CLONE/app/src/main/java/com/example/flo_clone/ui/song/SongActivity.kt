@@ -19,7 +19,6 @@ import com.google.gson.Gson
 class SongActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySongBinding
-    private lateinit var songEntity: SongEntity
     private lateinit var timer: Timer
     private var mediaPlayer: MediaPlayer? = null
 
@@ -246,8 +245,6 @@ class SongActivity : AppCompatActivity() {
             try {
                 while (true) {
 
-                    val startTime = System.currentTimeMillis()
-
                     // 노래 반복
                     if (second >= playTime) {
                         if (songs[nowPos].isRepeating) {
@@ -263,17 +260,14 @@ class SongActivity : AppCompatActivity() {
 
                     if (isPlaying) {
                         sleep(50)
-                        val currentTime = System.currentTimeMillis()
-                        mills += (currentTime - startTime).toFloat()
+                        mills += 50
 
                         runOnUiThread {
-                            binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
+                            binding.songProgressSb.progress = ((mills / playTime) * 100).toInt()
                         }
                         if (mills % 1000 == 0f) {
-                            second = (mills / 1000).toInt() // 초 값 업데이트
-                            songs[nowPos].second = second
                             runOnUiThread {
-                                binding.startTimerTv.text = String.format("%02d:%02d", songs[nowPos].second / 60, songs[nowPos].second % 60)
+                                binding.startTimerTv.text = String.format("%02d:%02d", second / 60, second % 60)
                             }
                             second++
                         }
