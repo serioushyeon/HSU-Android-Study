@@ -26,10 +26,10 @@ interface AlbumDao {
     fun likeAlbum(like: LikeEntity)
 
     @Query("SELECT id FROM LikeTable WHERE userId = :userId AND albumId = :albumId")
-    fun isLikedAlbum(userId: Int, albumId: Int): AlbumEntity?
+    fun isLikedAlbum(userId: Int, albumId: Int): Int?
 
     @Query("DELETE FROM LikeTable WHERE userId = :userId AND albumId = :albumId")
-    fun getLikedAlbums(userId: Int, albumId: Int): List<AlbumEntity>
+    fun disLikedAlbum(userId: Int, albumId: Int)
 
     @Query("SELECT A.* FROM LikeTable as LT LEFT JOIN AlbumTable as A ON LT.albumId = A.id WHERE LT.userID = :userId")
     fun getLikedAlbums(userId: Int): List<AlbumEntity>
