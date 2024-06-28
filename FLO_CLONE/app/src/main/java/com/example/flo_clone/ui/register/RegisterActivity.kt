@@ -30,14 +30,20 @@ class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_
     private fun getUser(): UserEntity {
         val email: String = binding.registerEmailEt.text.toString() + "@" + binding.registerEditDotCom.text.toString()
         val pwd: String = binding.registerPasswordEt.text.toString()
+        var name: String = binding.registerNameEt.text.toString()
 
-        return UserEntity(email, pwd)
+        return UserEntity(email, pwd, name)
     }
 
     private fun singUp() {
 
         if(binding.registerEmailEt.text.toString().isEmpty() || binding.registerEditDotCom.text.isEmpty()) {
             makeToast("이메일 형식이 잘못되었습니다.")
+            return
+        }
+
+        if(binding.registerNameEt.text.isEmpty()) {
+            makeToast("이름 형식이 잘못되었습니다.")
             return
         }
 
@@ -51,6 +57,10 @@ class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_
 
         val user = userDB.userDao().getUser()
         Log.d("SIGNUP", "user: ${user.toString()}")
+    }
+
+    private fun signUp() {
+
     }
 
 }
