@@ -1,6 +1,6 @@
 package com.example.flo_clone.service
 
-import com.example.flo_clone.data.AuthResponse
+import com.example.flo_clone.dto.AuthResponse
 import com.example.flo_clone.room.entity.UserEntity
 import retrofit2.Call
 import retrofit2.http.Body

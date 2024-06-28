@@ -1,4 +1,4 @@
-package com.example.flo_clone.data
+package com.example.flo_clone.dto
 
 import com.google.gson.annotations.SerializedName
 

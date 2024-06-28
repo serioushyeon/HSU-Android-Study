@@ -1,5 +1,6 @@
 package com.example.flo_clone.ui.look
 
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
@@ -7,10 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo_clone.R
 import com.example.flo_clone.base.BaseFragment
 import com.example.flo_clone.databinding.FragmentLookBinding
+import com.example.flo_clone.dto.FloChartResult
 import com.example.flo_clone.room.database.SongDatabase
 import com.example.flo_clone.room.entity.SongEntity
+import com.example.flo_clone.service.LookView
+import com.example.flo_clone.service.SongService
+import com.example.flo_clone.ui.SongRVAdapter
 
-class LookFragment : BaseFragment<FragmentLookBinding>(R.layout.fragment_look) {
+class LookFragment : BaseFragment<FragmentLookBinding>(R.layout.fragment_look), LookView {
 
     private lateinit var songDB: SongDatabase
 
@@ -33,6 +38,8 @@ class LookFragment : BaseFragment<FragmentLookBinding>(R.layout.fragment_look) {
     private lateinit var textList: List<TextView>
 
     private lateinit var nestedScrollView : NestedScrollView
+
+    private lateinit var floCharAdapter: SongRVAdapter
 
 
 
@@ -68,16 +75,22 @@ class LookFragment : BaseFragment<FragmentLookBinding>(R.layout.fragment_look) {
 
     override fun onStart() {
         super.onStart()
-        initRecyclerview()
+        getSongs()
     }
 
-    private fun initRecyclerview(){
-        val recyclerView = binding.lookChartSongRv
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        val lookAlbumRVAdapter = LookRVAdapter()
+    // 서버에서 음악 데이터 가져오는 함수
+    private fun getSongs() {
+        val songService = SongService()
+        songService.setLookView(this)
 
-        binding.lookChartSongRv.adapter = lookAlbumRVAdapter
-        lookAlbumRVAdapter.addSongs(songDB.songDao().getSongs() as ArrayList<SongEntity>)
+        songService.getSongs()
+
+    }
+
+    // 리사이클러뷰 초기화
+    private fun initRecyclerview(result: FloChartResult){
+        floCharAdapter = SongRVAdapter(requireContext(), result)
+        binding.lookFloChartRv.adapter = floCharAdapter
     }
 
     private fun setButtonClickListeners() {
@@ -99,5 +112,22 @@ class LookFragment : BaseFragment<FragmentLookBinding>(R.layout.fragment_look) {
             }
         }
         nestedScrollView.smoothScrollTo(0, textList[idx].top)
+    }
+
+    // 로딩
+    override fun onGetSongLoading() {
+        //binding.lookLoadingPb.visibility = View.VISIBLE
+    }
+
+    // 로딩 제거
+    override fun onGetSongSuccess(code: Int, result: FloChartResult) {
+        //binding.lookLoadingPb.visibility = View.GONE
+        initRecyclerview(result)
+
+    }
+
+    override fun onGetSongFailure(code: Int, message: String) {
+        //binding.lookLoadingPb.visibility = View.GONE
+        Log.d("LOOK-FRAG/SONG-RESPONSE", message)
     }
 }

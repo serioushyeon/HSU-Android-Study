@@ -4,17 +4,11 @@ import android.util.Log
 import android.widget.Toast
 import com.example.flo_clone.R
 import com.example.flo_clone.base.BaseActivity
-import com.example.flo_clone.data.AuthResponse
 import com.example.flo_clone.databinding.ActivityRegisterBinding
-import com.example.flo_clone.module.getRetrofit
-import com.example.flo_clone.service.AuthRetrofitInterface
 import com.example.flo_clone.room.database.SongDatabase
 import com.example.flo_clone.room.entity.UserEntity
 import com.example.flo_clone.service.AuthService
 import com.example.flo_clone.service.SignUpView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_register), SignUpView {
 

@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flo_clone.MainActivity
-import com.example.flo_clone.data.Result
+import com.example.flo_clone.dto.Result
 import com.example.flo_clone.databinding.ActivityLoginBinding
 import com.example.flo_clone.room.database.SongDatabase
 import com.example.flo_clone.room.entity.UserEntity

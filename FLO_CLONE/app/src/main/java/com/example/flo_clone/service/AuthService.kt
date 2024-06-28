@@ -1,7 +1,7 @@
 package com.example.flo_clone.service
 
 import android.util.Log
-import com.example.flo_clone.data.AuthResponse
+import com.example.flo_clone.dto.AuthResponse
 import com.example.flo_clone.module.getRetrofit
 import com.example.flo_clone.room.entity.UserEntity
 import retrofit2.Call
@@ -52,7 +52,7 @@ class AuthService {
 
                 val res = response.body()!!
                 when(val code = res.code) {
-                    1000 -> loginView.onLoginSuccess(code, res.result)
+                    1000 -> loginView.onLoginSuccess(code, res.result!!)
                     else -> loginView.onLoginFailure()
 
                 }
