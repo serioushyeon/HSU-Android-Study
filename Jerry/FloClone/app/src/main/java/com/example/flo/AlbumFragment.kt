@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.flo.databinding.ActivitySongBinding
 import com.example.flo.databinding.FragmentAlbumBinding
@@ -18,6 +19,8 @@ class AlbumFragment : Fragment() {
 
     private val information = arrayListOf("수록곡", "상세정보", "영상")
 
+    private var isLiked : Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,13 +30,10 @@ class AlbumFragment : Fragment() {
 
         val albumJson = arguments?.getString("album")
         val album = gson.fromJson(albumJson, Album::class.java)
-        setInit(album)
 
-        binding.albumBackIv.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm,HomeFragment())
-                .commitAllowingStateLoss()
-        }
+        isLiked = isLikedAlbum((album.id))
+        setInit(album)
+        setClickListeners(album)
 
         val albumAdapter = AlbumVPAdapter(this)
         binding.albumContentVp.adapter = albumAdapter
@@ -43,12 +43,12 @@ class AlbumFragment : Fragment() {
             tab.text = information[position]
         }.attach()
 
-        binding.albumLikeIv.setOnClickListener {
-            setLikeStatus(false)
-        }
-        binding.albumColorLikeIv.setOnClickListener {
-            setLikeStatus(true)
-        }
+//        binding.albumLikeIv.setOnClickListener {
+//            setLikeStatus(false)
+//        }
+//        binding.albumColorLikeIv.setOnClickListener {
+//            setLikeStatus(true)
+//        }
 
         return binding.root
     }
@@ -57,17 +57,73 @@ class AlbumFragment : Fragment() {
         binding.albumAlbumIv.setImageResource(album.coverImg!!)
         binding.albumMusicTitleTv.text = album.title.toString()
         binding.albumSingerNameTv.text = album.singer.toString()
+        if(isLiked){
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        }else {
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
+    }
+
+    private fun getJwt(): Int {
+        val spf = activity?.getSharedPreferences("auth" , AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getInt("jwt", 0)
+    }
+
+    private fun likeAlbum(userId: Int, albumId: Int) {
+        val songDB = SongDatabase.getInstance(requireContext())!!
+        val like = Like(userId, albumId)
+
+        songDB.albumDao().likeAlbum(like)
+    }
+
+    private fun isLikedAlbum(albumId: Int): Boolean {
+        val songDB = SongDatabase.getInstance(requireContext())!!
+        val userId = getJwt()
+
+        val likeId: Int? = songDB.albumDao().isLikedAlbum(userId, albumId)
+
+        return likeId != null
+    }
+
+    private fun disLikedAlbum(albumId: Int){
+        val songDB = SongDatabase.getInstance(requireContext())!!
+        val userId = getJwt()
+
+        songDB.albumDao().disLikedAlbum(userId, albumId)
+    }
+
+    private fun setClickListeners(album: Album) {
+        val userId: Int = getJwt()
+
+        binding.albumLikeIv.setOnClickListener {
+            if(isLiked) {
+                binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
+                disLikedAlbum(album.id)
+            } else {
+                binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
+                likeAlbum(userId, album.id)
+            }
+
+            isLiked = !isLiked
+        }
+
+        //set click listener
+        binding.albumBackIv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, HomeFragment())
+                .commitAllowingStateLoss()
+        }
     }
 
 
-    fun setLikeStatus(isPlaying : Boolean){
-        if(isPlaying){
-            binding.albumLikeIv.visibility = View.VISIBLE
-            binding.albumColorLikeIv.visibility = View.GONE
-        }
-        else{
-            binding.albumLikeIv.visibility = View.GONE
-            binding.albumColorLikeIv.visibility = View.VISIBLE
-        }
-    }
+//    fun setLikeStatus(isPlaying : Boolean){
+//        if(isPlaying){
+//            binding.albumLikeIv.visibility = View.VISIBLE
+//            binding.albumColorLikeIv.visibility = View.GONE
+//        }
+//        else{
+//            binding.albumLikeIv.visibility = View.GONE
+//            binding.albumColorLikeIv.visibility = View.VISIBLE
+//        }
+//    }
 }
