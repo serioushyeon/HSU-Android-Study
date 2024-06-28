@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.serioushyeon.floclone.databinding.FragmentAlbumBinding
@@ -14,7 +15,6 @@ import com.serioushyeon.floclone.databinding.FragmentAlbumBinding
 class AlbumFragment : Fragment() {
     private lateinit var binding: FragmentAlbumBinding
     private val information = arrayListOf("수록곡", "상세정보", "영상")
-
     private var isLiked: Boolean = false
 
     override fun onCreateView(
@@ -27,21 +27,25 @@ class AlbumFragment : Fragment() {
         val albumData = arguments?.getString("album")
         val gson = Gson()
 
-        val album = gson.fromJson(albumData, Album::class.java)
-        isLiked = isLikedAlbum(album.id)
+        val albumChartSongs = gson.fromJson(albumData, AlbumChartSongs::class.java)
+        isLiked = isLikedAlbum(albumChartSongs.albumIdx)
 
-        setViews(album)
+        setViews(albumChartSongs)
         initViewPager()
-        setClickListeners(album)
+        setClickListeners(albumChartSongs)
 
 
         return binding.root
     }
 
-    private fun setViews(album: Album) {
-        binding.albumMusicTitleTv.text = album.title.toString()
-        binding.albumSingerNameTv.text = album.singer.toString()
-        binding.albumAlbumIv.setImageResource(album.coverImg!!)
+    private fun setViews(albumChartSongs: AlbumChartSongs) {
+        binding.albumMusicTitleTv.text = albumChartSongs.title.toString()
+        binding.albumSingerNameTv.text = albumChartSongs.singer.toString()
+        albumChartSongs.coverImgUrl?.let { coverImgUrl ->
+            Glide.with(this)
+                .load(coverImgUrl)
+                .into(binding.albumAlbumIv)
+        }
 
         if(isLiked) {
             binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
@@ -50,16 +54,16 @@ class AlbumFragment : Fragment() {
         }
     }
 
-    private fun setClickListeners(album: Album) {
+    private fun setClickListeners(album: AlbumChartSongs) {
         val userId: Int = getJwt()
 
         binding.albumLikeIv.setOnClickListener {
             if(isLiked) {
                 binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
-                disLikeAlbum(userId, album.id)
+                disLikeAlbum(userId, album.albumIdx)
             } else {
                 binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
-                likeAlbum(userId, album.id)
+                likeAlbum(userId, album.albumIdx)
             }
 
             isLiked = !isLiked
