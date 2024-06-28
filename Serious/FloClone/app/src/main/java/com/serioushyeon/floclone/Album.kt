@@ -9,6 +9,5 @@ data class Album(
     @PrimaryKey(autoGenerate = false) var id: Int = 0,
     var title: String? = "",
     var singer: String? = "",
-    var coverImg: Int? = null,
-//    var songs: ArrayList<Song>? = null  // 수록곡
+    var coverImg: Int? = null
 )
