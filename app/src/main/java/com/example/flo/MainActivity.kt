@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 songDB.songDao().getSong(songId)
             }*/
 
+
             withContext(Dispatchers.Main) {
                 Log.d("song ID", song.id.toString())
                 setMiniPlayer(song)
@@ -229,6 +230,7 @@ class MainActivity : AppCompatActivity() {
         val songDB = SongDatabase.getInstance(this)!!
         val songs = songDB.songDao().getSongs()
 
+
         val song1 = Song("Magnetic", "아일릿(ILLIT)", 0, 200, false, false, "music_magnetic", R.drawable.img_album_exp3)
         val song2 = Song("Supernova", "에스파(aespa)", 0, 200, false, false, "music_supernova", R.drawable.song_supernova)
         val song3 = Song("Next Level", "에스파(aespa)", 0, 200, false, false, "music_next", R.drawable.img_album_next)
@@ -259,11 +261,13 @@ class MainActivity : AppCompatActivity() {
 
             val _songs = songDB.songDao().getSongs()
             Log.d("DB data", _songs.toString())
+
         } catch (e: Exception) {
             Log.e("메인에러", "Error inserting dummy songs", e)
         }
     }
 
 
+    //ROOM_DB
 
 }

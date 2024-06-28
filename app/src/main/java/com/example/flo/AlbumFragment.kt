@@ -15,7 +15,6 @@ class AlbumFragment : Fragment() { // 프래그먼트의 기능을 사용할 수
     lateinit var binding : FragmentAlbumBinding
     private var gson: Gson = Gson()
     private val information = arrayListOf("수록곡", "상세정보", "영상")
-
     private var isLiked : Boolean = false
 
     override fun onCreateView(
@@ -36,6 +35,8 @@ class AlbumFragment : Fragment() { // 프래그먼트의 기능을 사용할 수
         isLiked = isLikedAlbum(album.id)
         setInit(album) // Home에서 받아온 데이터를 반영
         setOnClikLikeListener(album)
+
+
 
         val albumAdapter = AlbumVPAdapter(this)
         binding.albumContentVp.adapter = albumAdapter
@@ -100,5 +101,6 @@ class AlbumFragment : Fragment() { // 프래그먼트의 기능을 사용할 수
                 likeAlbum(userId, album.id)
             }
         }
+
     }
 }
