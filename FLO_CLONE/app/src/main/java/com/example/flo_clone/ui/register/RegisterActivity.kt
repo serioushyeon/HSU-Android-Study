@@ -1,21 +1,22 @@
 package com.example.flo_clone.ui.register
 
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.example.flo_clone.R
 import com.example.flo_clone.base.BaseActivity
 import com.example.flo_clone.data.AuthResponse
 import com.example.flo_clone.databinding.ActivityRegisterBinding
 import com.example.flo_clone.module.getRetrofit
-import com.example.flo_clone.retrofit.AuthRetrofitInterface
+import com.example.flo_clone.service.AuthRetrofitInterface
 import com.example.flo_clone.room.database.SongDatabase
 import com.example.flo_clone.room.entity.UserEntity
+import com.example.flo_clone.service.AuthService
+import com.example.flo_clone.service.SignUpView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
+class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_register), SignUpView {
 
     override fun setLayout() {
         setButton()
@@ -82,26 +83,21 @@ class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_
             return
         }
 
-        val authService = getRetrofit().create(AuthRetrofitInterface::class.java)
-        authService.signUp(getUser()).enqueue(object: Callback<AuthResponse>{
-            override fun onResponse(p0: Call<AuthResponse>, response: Response<AuthResponse>) {
-                Log.d("SIGNUP/SUCCESS", response.toString())
-                val res = response.body()!!
-                when(res.code) {
-                    1000 -> finish()
-                    2016, 2018 -> {
-                        //binding.signUpEmailErrorTv.visiblity = View.VISIBLE
-                        //binding.signUpEmailErrorTv.text = res.message
-                    }
 
-                }
-            }
 
-            override fun onFailure(p0: Call<AuthResponse>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString())
-            }
-        })
-        Log.d("SIGNUP", "HELLO")
+        val authService = AuthService()
+        authService.setSignUpView(this)
+
+        authService.signUp(getUser())
+
+    }
+
+    override fun onSignUpSuccess() {
+        finish()
+    }
+
+    override fun onSignUpFailure() {
+        TODO("Not yet implemented")
     }
 
 }

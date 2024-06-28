@@ -1,4 +1,4 @@
-package com.example.flo_clone.retrofit
+package com.example.flo_clone.service
 
 import com.example.flo_clone.data.AuthResponse
 import com.example.flo_clone.room.entity.UserEntity
