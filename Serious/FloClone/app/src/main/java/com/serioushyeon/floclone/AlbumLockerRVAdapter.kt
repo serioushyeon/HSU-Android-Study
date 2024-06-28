@@ -49,7 +49,7 @@ class AlbumLockerRVAdapter (): RecyclerView.Adapter<AlbumLockerRVAdapter.ViewHol
     }
     inner class ViewHolder(val binding: ItemLockerAlbumBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(album: Album){
-            binding.itemAlbumImgIv.setImageResource(album.coverImg!!)
+            binding.itemAlbumImgIv.setImageResource(album.coverImgUrl!!)
             binding.itemAlbumTitleTv.text = album.title
             binding.itemAlbumSingerTv.text = album.singer
         }

@@ -1,5 +1,6 @@
 package com.serioushyeon.floclone
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -24,11 +25,11 @@ class MainActivity : AppCompatActivity() {
     val songs = arrayListOf<Song>()
     lateinit var songDB: SongDatabase
     var nowPos = 0
-
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTheme(R.style.Theme_FloClone)
+        //setTheme(R.style.Theme_FloClone)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,19 +40,26 @@ class MainActivity : AppCompatActivity() {
         initPlayList()
         initSong()
         initClickListener()
-//        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false, "music_lilac")
+        //val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false, "music_lilac")
 
-        binding.mainPlayerCl.setOnClickListener{
+        binding.mainPlayerCl.setOnClickListener {
             val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
-            editor.putInt("songId",song.id)
+            editor.putInt("songId", song.id)
             editor.apply()
 
-            val intent = Intent(this,SongActivity::class.java)
+            val intent = Intent(this, SongActivity::class.java)
             startActivity(intent)
         }
 
 
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
+
+    }
+
+    private fun getJwt(): String? {
+        val spf = this.getSharedPreferences("auth2" , AppCompatActivity.MODE_PRIVATE)
         Log.d("Song", song.title + song.singer)
+        return spf!!.getString("jwt", "")
     }
 
     private fun initBottomNavigation(){
