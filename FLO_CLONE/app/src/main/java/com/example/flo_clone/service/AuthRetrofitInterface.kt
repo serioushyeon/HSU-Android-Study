@@ -11,4 +11,6 @@ interface AuthRetrofitInterface {
     @POST("/users")
     fun signUp(@Body userEntity: UserEntity): Call<AuthResponse>
 
+    @POST("/users/login")
+    fun login(@Body userEntity: UserEntity): Call<AuthResponse>
 }

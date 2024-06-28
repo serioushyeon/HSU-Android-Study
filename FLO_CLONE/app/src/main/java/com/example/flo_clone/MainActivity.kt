@@ -149,11 +149,19 @@ class MainActivity : AppCompatActivity() {
         binding.playerListBtn.setOnClickListener {
           displayNotification()
         }
+
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
     }
 
     // 토스트 메시지 만드는 함수
     private fun makeToastMsg(msg: String) {
         Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun getJwt(): String? {
+        val spf = this?.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt", "")
     }
 
     // 처음 시작하는 프래그먼트 설정하는 함수

@@ -25,7 +25,8 @@ class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_
 
     private fun setButton() {
         binding.registerRegisterBtn.setOnClickListener {
-            singUp()
+            //singUp()
+            signUpRoom()
             makeToast("회원가입이 완료되었습니다.")
             finish()
         }
