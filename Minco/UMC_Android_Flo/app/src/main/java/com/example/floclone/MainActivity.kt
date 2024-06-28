@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         initBottomNavigation()
         inputDummySongs()
+        inputDummyAlbums()
 
         //이제 필요없음 -> sharedPreferences로 값을 가져오기 때문
         //val song = Song(binding.mainPlayTitleTv.text.toString(),binding.mainPlaySingerTv.text.toString(),0,60,false,"music_tomorow")
@@ -130,6 +131,11 @@ class MainActivity : AppCompatActivity() {
 
     //재생 버튼 변경
     private fun setPlayerStatus(isPlaying :Boolean){
+        if (songs.isEmpty()) { // 리스트가 비어 있는지 확인
+            Toast.makeText(this, "No songs available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         songs[nowPos].isPlaying = isPlaying
         timer.isPlaying = isPlaying
 
@@ -149,6 +155,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun moveSong(direct: Int) {
         val songs = songDB.songDao().getSongs()
+
+        if (songs.isEmpty()) { // 리스트가 비어 있는지 확인
+            Toast.makeText(this, "No songs available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         nowPos = songs.indexOfFirst { it.id == song.id }
 
         if (nowPos + direct < 0) {
@@ -174,6 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun inputDummySongs() {
+        val songDB = SongDatabase.getInstance(this)!!
         val songs = songDB.songDao().getSongs()
         if (songs.isNotEmpty()) return
 
@@ -244,6 +257,56 @@ class MainActivity : AppCompatActivity() {
 
         val _songs = songDB.songDao().getSongs()
         Log.d("DBDB", _songs.toString()) //데이터가 잘 들어왔는지 확인
+    }
+
+    private fun inputDummyAlbums() {
+        val songDB = SongDatabase.getInstance(this)!!
+        val albums = songDB.albumDao().getAlbums()
+        if (albums.isNotEmpty()) return
+
+        songDB.albumDao().insert(
+            Album(
+                0,
+                "내일의 우리 앨범", "카더가든", R.drawable.img_album_exp3
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                1,
+                "Shake It Off 앨범",
+                "Taylor Swift",
+                R.drawable.img_album_exp
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                2,
+                "우리의 사랑은 앨범",
+                "찰리빈웍스",
+                R.drawable.img_album_exp4
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                3,
+                "Surf Boy 앨범",
+                "혁오",
+                R.drawable.img_album_exp6
+            )
+        )
+        songDB.albumDao().insert(
+            Album(
+                4,
+                "Ling Ling앨범",
+                "검정치마",
+                R.drawable.img_album_exp6
+            )
+        )
+
+
+
+        val _albums = songDB.songDao().getSongs()
+        Log.d("DBDB", _albums.toString()) //데이터가 잘 들어왔는지 확인
     }
 
     override fun onStart() {
