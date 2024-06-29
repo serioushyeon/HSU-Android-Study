@@ -28,18 +28,45 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <EditText
+            android:id="@+id/sign_up_name_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="16dp"
+            android:background="@null"
+            android:hint="이름"
+            android:inputType="textPersonName"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/signup_id_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/sign_up_name_underscore_view"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="15dp"
+            android:background="#a8a8a8"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_name_et" />
+
+        <EditText
             android:id="@+id/signup_id_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="20dp"
+            android:background="@null"
             android:hint="아이디(이메일)"
             android:inputType="text"
-            android:background="@null"
             app:layout_constraintEnd_toStartOf="@+id/signup_direct_email_et"
-            app:layout_constraintHorizontal_bias="0.301"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_name_et" />
 
         <View
             android:id="@+id/sign_up_id_underscore_view"
@@ -55,29 +82,31 @@
             android:id="@+id/signup_at_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="34dp"
             android:text="\@"
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/signup_password_et"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="5dp"
             app:layout_constraintEnd_toStartOf="@+id/signup_direct_email_et"
-            app:layout_constraintHorizontal_bias="0.951"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/signup_id_et"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.964" />
 
         <EditText
             android:id="@+id/signup_direct_email_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@null"
             android:ems="10"
             android:hint="직접입력"
             android:inputType="textEmailAddress"
-            android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_name_et" />
+
         <View
             android:id="@+id/signup_email_address_underscore_view"
             android:layout_width="0dp"
