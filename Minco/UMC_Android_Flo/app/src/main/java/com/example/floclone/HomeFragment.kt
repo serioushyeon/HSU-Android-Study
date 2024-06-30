@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,7 @@ class HomeFragment : Fragment() {
     private var albumDatas = ArrayList<Album>()
     private val timer = Timer()
     private val handler = Handler(Looper.getMainLooper())
-
+    private lateinit var songDB : SongDatabase
 
     //onViewCreated() 메서드는 Fragment의 뷰가 생성된 후 호출
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,13 +46,18 @@ class HomeFragment : Fragment() {
 //            }
 
         //데이터 리스트 생성 더미 데이터
-        albumDatas.apply {
-            add(Album("내일의 우리","카더가든",R.drawable.img_album_exp3))
-            add(Album("Shake It Off","Tatlor Swift",R.drawable.img_album_exp))
-            add(Album("우리의 사랑은","찰리빈웍스",R.drawable.img_album_exp4))
-            add(Album("Ling Ling","검정치마",R.drawable.img_album_exp5))
-            add(Album("Surf boy","혁오",R.drawable.img_album_exp6 ))
-        }
+        songDB = SongDatabase.getInstance(requireContext())!!
+        albumDatas.addAll(songDB.albumDao().getAlbums())
+        Log.d("DBDB", albumDatas.toString()) // 앨범 데이터 가져왔는지 로그 확인
+
+
+//        albumDatas.apply {
+//            add(Album("내일의 우리","카더가든",R.drawable.img_album_exp3))
+//            add(Album("Shake It Off","Tatlor Swift",R.drawable.img_album_exp))
+//            add(Album("우리의 사랑은","찰리빈웍스",R.drawable.img_album_exp4))
+//            add(Album("Ling Ling","검정치마",R.drawable.img_album_exp5))
+//            add(Album("Surf boy","혁오",R.drawable.img_album_exp6 ))
+//        }
 
         //어댑터 arrayList연결
         // 매개변수로 만들었던 데이터 리스트 던져줌
