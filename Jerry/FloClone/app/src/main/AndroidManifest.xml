@@ -23,6 +23,11 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
+        <!-- Login Activity Declaration -->
+        <activity android:name=".LoginActivity"></activity>
+
+        <!-- SignUp Activity Declaration (if it exists) -->
+        <activity android:name=".SignUpActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
