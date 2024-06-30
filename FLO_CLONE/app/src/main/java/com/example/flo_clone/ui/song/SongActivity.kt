@@ -1,29 +1,26 @@
 package com.example.flo_clone.ui.song
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
-import com.example.flo_clone.data.Song
 import com.example.flo_clone.databinding.ActivitySongBinding
-import com.example.flo_clone.room.SongDatabase
-import com.example.flo_clone.room.SongEntity
+import com.example.flo_clone.room.database.SongDatabase
+import com.example.flo_clone.room.entity.SongEntity
 import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySongBinding
-    private lateinit var songEntity: SongEntity
     private lateinit var timer: Timer
     private var mediaPlayer: MediaPlayer? = null
-    private var gson: Gson = Gson()
 
     private val songs = arrayListOf<SongEntity>()
     private lateinit var songDB: SongDatabase
@@ -40,6 +37,11 @@ class SongActivity : AppCompatActivity() {
         //setPlayer(songs[nowPos])
 
         setPlayerStatus(isPlaying = false)
+    }
+
+    // Toast 메시지 만드는 함수
+    private fun makeToastMsg(context: Context, msg: String) {
+        val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     // 노래 리스트에 추가
@@ -123,8 +125,10 @@ class SongActivity : AppCompatActivity() {
         // 뷰 렌더링
         if (!isLike) {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+            makeToastMsg(this@SongActivity, "좋아요 한 곡에 담겼습니다.")
         } else {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+            makeToastMsg(this@SongActivity, "좋아요 한 곡이 취소되었습니다.")
         }
     }
 
@@ -156,12 +160,17 @@ class SongActivity : AppCompatActivity() {
 
         // 이전 곡 재생
         binding.songPreviousIv.setOnClickListener{
-            moveSong(+1)
+            if (nowPos == 5) moveSong(-5)
+            else moveSong(+1)
         }
 
         // 다음 곡 재생
         binding.songNextIv.setOnClickListener{
-            moveSong(-1)
+            if (nowPos == 0) {
+                moveSong(+5)
+            } else {
+                moveSong(-1)
+            }
         }
 
         // 반복 재생
@@ -236,8 +245,9 @@ class SongActivity : AppCompatActivity() {
             try {
                 while (true) {
 
+                    // 노래 반복
                     if (second >= playTime) {
-                        if (songEntity.isRepeating) {
+                        if (songs[nowPos].isRepeating) {
                             mills = 0f
                             second = 0
                             mediaPlayer?.seekTo(0)
@@ -253,11 +263,11 @@ class SongActivity : AppCompatActivity() {
                         mills += 50
 
                         runOnUiThread {
-                            binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
+                            binding.songProgressSb.progress = ((mills / playTime) * 100).toInt()
                         }
                         if (mills % 1000 == 0f) {
                             runOnUiThread {
-                                binding.startTimerTv.text = String.format("%02d:%02d", songs[nowPos].second / 60, songs[nowPos].second % 60)
+                                binding.startTimerTv.text = String.format("%02d:%02d", second / 60, second % 60)
                             }
                             second++
                         }
@@ -273,13 +283,16 @@ class SongActivity : AppCompatActivity() {
     // 사용자가 포커스를 잃었을 때 음악이 중지
     override fun onPause() {
         super.onPause()
+
         setPlayerStatus(false)
+        songs[nowPos].isPlaying = false
         songs[nowPos].second = ((binding.songProgressSb.progress * songs[nowPos].playTime)/100)/1000
 
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit() // 에디터
 
         editor.putInt("songId", songs[nowPos].id)
+        editor.putInt("songSecond", songs[nowPos].second) // 현재 재생 위치 저장
         editor.apply()
     }
 

@@ -3,9 +3,8 @@ package com.example.flo_clone.ui.album
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.ItemAlbumBinding
-import com.example.flo_clone.room.AlbumEntity
+import com.example.flo_clone.room.entity.AlbumEntity
 
 class AlbumRvAdapter (val albumList: ArrayList<AlbumEntity>) :
     RecyclerView.Adapter<AlbumRvAdapter.AlbumViewHolder>() {

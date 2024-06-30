@@ -1,5 +1,6 @@
 package com.example.flo_clone.ui.locker.savedsongs
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,15 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo_clone.R
-import com.example.flo_clone.data.SavedSongs
 import com.example.flo_clone.databinding.FragmentSavedSongsBinding
-import com.example.flo_clone.room.SongDatabase
-import com.example.flo_clone.room.SongEntity
+import com.example.flo_clone.room.database.SongDatabase
+import com.example.flo_clone.room.entity.SongEntity
+import com.example.flo_clone.ui.locker.BottomSheetFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SavedSongsFragment : Fragment() {
 
     lateinit var binding: FragmentSavedSongsBinding
+    lateinit var savedSongAdapter: SavedSongAdapter
     lateinit var songDB: SongDatabase
+
+    private lateinit var bottomSheetFragment: BottomSheetFragment
+    private var isSelect = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,7 @@ class SavedSongsFragment : Fragment() {
         songDB = SongDatabase.getInstance(requireContext())!!
 
         setRecyclerView()
+        selectAll()
         return binding.root
     }
 
@@ -40,6 +47,35 @@ class SavedSongsFragment : Fragment() {
         setRecyclerView()
     }
 
+    private fun setBottomSheetFragment() {
+        bottomSheetFragment = BottomSheetFragment()
+    }
+
+    private fun selectAll() {
+
+        // 전체듣기 클릭리스너
+        binding.selectAllContainer.setOnClickListener{
+
+            if (!isSelect) {
+                binding.savedSongsSelectSongImgIv.setColorFilter(Color.BLUE)
+                binding.savedSongsSelectSongTv.setTextColor(Color.BLUE)
+                binding.savedSongsSelectSongTv.text = "선택해제"
+                setBottomSheetFragment()
+                bottomSheetFragment.show(this@SavedSongsFragment.parentFragmentManager, "BottomSheetDialog")
+                savedSongAdapter.notifyDataSetChanged()
+                isSelect = true
+            }
+            else {
+                binding.savedSongsSelectSongImgIv.setColorFilter(Color.BLACK)
+                binding.savedSongsSelectSongTv.setTextColor(Color.BLACK)
+                binding.savedSongsSelectSongTv.text = "전체선택"
+                isSelect = false
+                bottomSheetFragment.dismiss()
+            }
+        }
+    }
+
+    // 리사이클러뷰 생성 및 어댑터 연결 함수
     private fun setRecyclerView() {
 
         // 리사이클러뷰 생성
@@ -48,7 +84,7 @@ class SavedSongsFragment : Fragment() {
         )
 
         // 어댑터 생성 및 바인딩
-        val savedSongAdapter = SavedSongAdapter()
+        savedSongAdapter = SavedSongAdapter()
         binding.savedSongsPlayListRv.adapter = savedSongAdapter
 
         savedSongAdapter.addSongs(songDB.songDao().getLikedSongs(true) as ArrayList<SongEntity>)
@@ -58,7 +94,6 @@ class SavedSongsFragment : Fragment() {
                 songDB.songDao().updateIsLikeById(false, songId)
             }
         })
-
-
     }
+
 }

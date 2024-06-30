@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
 import com.example.flo_clone.databinding.ActivitySplashBinding
+import com.example.flo_clone.ui.login.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
     lateinit var binding: ActivitySplashBinding
@@ -22,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
 
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }, 1000)
 
     }

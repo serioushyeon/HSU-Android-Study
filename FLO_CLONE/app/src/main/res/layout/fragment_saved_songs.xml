@@ -14,23 +14,36 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/select_all_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
             android:id="@+id/saved_songs_select_song_img_iv"
             android:src="@drawable/btn_playlist_select_off"
             android:layout_marginStart="15dp"
             android:layout_width="20dp"
             android:layout_height="20dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:text="전체선택"
-            android:textSize="15dp"/>
+            <TextView
+                android:id="@+id/saved_songs_select_song_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="전체선택"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/play_all_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_marginStart="20dp"
@@ -43,8 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:text="전체선택"
+            android:text="전체듣기"
             android:textSize="15dp"/>
+    </LinearLayout>
 
     </LinearLayout>
 

@@ -9,9 +9,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,15 +21,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.ActivityMainBinding
-import com.example.flo_clone.room.AlbumEntity
+import com.example.flo_clone.room.entity.AlbumEntity
 import com.example.flo_clone.ui.home.HomeFragment
 import com.example.flo_clone.ui.locker.LockerFragment
 import com.example.flo_clone.ui.look.LookFragment
 import com.example.flo_clone.ui.search.SearchFragment
-import com.example.flo_clone.room.SongDatabase
-import com.example.flo_clone.room.SongEntity
+import com.example.flo_clone.room.database.SongDatabase
+import com.example.flo_clone.room.entity.SongEntity
 import com.example.flo_clone.ui.song.SongActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -39,13 +40,18 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding // 뷰 바인딩 함수
 
-    private var song: SongEntity = SongEntity()
-    private var gson:Gson = Gson()
-
     private val CHANNEL_ID = "testChannel01"
     private lateinit var notificationManager: NotificationManager
 
+    private var song: SongEntity = SongEntity()
     private var abEntity = AlbumEntity()
+
+    private lateinit var songDB: SongDatabase
+    private val songsList = arrayListOf<SongEntity>()
+    private  var nowPos = 0
+
+    private lateinit var timer: Timer
+    private var mediaPlayer : MediaPlayer? = null
 
 
     companion object {
@@ -132,16 +138,19 @@ class MainActivity : AppCompatActivity() {
 
         inputDummySongs()
         inputDummyAlbums()
-
-        setStartFragment()      // 시작 프래그먼트 설정 (홈)
-        setBottomNavigation()   // 바텀네비게이션 뷰 설정
-        changeActivity()        // MainPlayer 클릭하면 액티비티 변경
+        initPlayList()          // songEntity 정보들 배열에 저장 (초기화)
+        setBottomNavigation()  // 바텀네비게이션 뷰 설정
+        setStartFragment()    // 시작 프래그먼트 설정 (홈)
+        setButton()          // MainPlayer 클릭하면 액티비티 변경
+        initSong()          // 노래 초기화
 
         createNotificationChannel(CHANNEL_ID, "Test Channel", "Test Channel Description")
 
         binding.playerListBtn.setOnClickListener {
           displayNotification()
         }
+
+        Log.d("MAIN/JWT_TO_SERVER", getJwt().toString())
     }
 
     // 토스트 메시지 만드는 함수
@@ -149,19 +158,10 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "${msg}", Toast.LENGTH_SHORT).show()
     }
 
-    // mainPlayer 클릭하면 액티비티 변경하는 함수
-    private fun changeActivity() {
-//        val song = Song(binding.mainMiniPlayerTitleTv.text.toString(), binding.mainMiniPlayerSingerTv.text.toString(),
-//            0, 214, false, "music_lilac")
 
-        binding.mainPlayer.setOnClickListener {
-            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
-            editor.putInt("songID", song.id)
-            editor.apply()
-
-            val intent = Intent(this, SongActivity::class.java)
-            startActivity(intent)
-        }
+    private fun getJwt(): String? {
+        val spf = this?.getSharedPreferences("auth2", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt", "")
     }
 
     // 처음 시작하는 프래그먼트 설정하는 함수
@@ -175,8 +175,8 @@ class MainActivity : AppCompatActivity() {
 
     // 바텀네비게이션 뷰를 설정하는 함수 -> menu 파일의 home_navigation_menu 파일 사용
     private fun setBottomNavigation() {
-        val bottomNavigationView = binding.bottomNav // 바텀네비게이션 뷰 변수에 설정 (뷰 바인딩)
-        bottomNavigationView.itemIconTintList = null // 바텀네비게이션 뷰 스타일 x -> 클릭시 클릭이미지, 색으로 변하게 하기 위해
+        val bottomNavigationView = binding.bottomNav
+        bottomNavigationView.itemIconTintList = null
 
         // 바텀 네비게이션 뷰의 아이템 선택 리스너
         bottomNavigationView.setOnItemSelectedListener {
@@ -209,118 +209,144 @@ class MainActivity : AppCompatActivity() {
 
     // 미니 플레이어의 제목, 가수명, seekBar progress를 Song의 데이터로 설정하는 함수
     private fun setMiniPlayer(song: SongEntity) {
-        val title = intent.getStringExtra("album_title")
-        val singer = intent.getStringExtra("album_singer")
-
-        binding.mainMiniPlayerTitleTv.text = title ?: song.title
-        binding.mainMiniPlayerSingerTv.text = singer ?: song.singer
+        binding.mainMiniPlayerTitleTv.text = song.title
+        binding.mainMiniPlayerSingerTv.text = song.singer
         binding.mainSongProgressSb.progress = (song.second * 100000) / song.playTime
+        mediaPlayer?.seekTo(song.second * 1000) // 불러온 재생 위치로 이동
+
+        val music = resources.getIdentifier(song.music, "raw", this.packageName)
+        mediaPlayer = MediaPlayer.create(this, music)
+
+        setPlayerStatus(song.isPlaying)
     }
 
+    private fun setButton() {
+
+        // mainPlayer 클릭하면 로 SongActivity로이동 (SongActivity로 데이터 연동)
+        binding.mainPlayer.setOnClickListener {
+            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
+            editor.putInt("songID", song.id)
+            editor.apply()
+
+            val intent = Intent(this, SongActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 재생/정지 버튼 클릭
+        binding.mainMiniPlayerStartBtn.setOnClickListener{
+            setPlayerStatus(true)
+        }
+        binding.mainPlayerPauseBtn.setOnClickListener{
+            setPlayerStatus(false)
+        }
+
+        // 다음/이전 곡 버튼 클릭
+        binding.mainMiniNextMusicBtn.setOnClickListener {
+            moveSong(+1)
+        }
+
+        binding.mainMiniPlayerPrevBtn.setOnClickListener {
+            moveSong(-1)
+        }
+    }
+
+    // 이전, 다음 곡으로 노래 이동
+    private fun moveSong(direct: Int) {
+        if (nowPos + direct < 0) {
+            Toast.makeText(this, "first song", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        if (nowPos + direct >= songsList.size) {
+            Toast.makeText(this, "last song", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        nowPos += direct
+
+        timer.interrupt()
+        startTimer()
+
+        mediaPlayer?.release()
+        mediaPlayer = null
+
+        setMiniPlayer(songsList[nowPos])
+    }
+
+
+    // 현재 위치의 음악 반환
+    private fun getPlayingSongPosition(songId: Int): Int {
+        for (i in 0 until songsList.size) {
+            if (songsList[i].id == songId) {
+                return i
+            }
+        }
+        return 0
+    }
+
+    // SongActivity와 같이 리스트에 엔티티 추가
+    private fun initPlayList() {
+        songDB = SongDatabase.getInstance(this)!!
+        songsList.addAll(songDB.songDao().getSongs())
+    }
+
+    // 노래 초기화하는 함수
+    private fun initSong() {
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        val songId = spf.getInt("songId", 0)
+
+        nowPos = getPlayingSongPosition(songId)
+
+        Log.d("now Song ID", songsList[nowPos].id.toString())
+
+        startTimer()
+        setMiniPlayer(songsList[nowPos])
+    }
+
+    // 재생/정지 버튼 클릭시 호출되는 함수 -> 클릭시 이미지 변경, 음악 재생 및 정지
+    private fun setPlayerStatus(isPlaying: Boolean) {
+        songsList[nowPos].isPlaying = isPlaying
+        timer.isPlaying = isPlaying
+
+        if (isPlaying) {
+            binding.mainMiniPlayerStartBtn.visibility = View.GONE
+            binding.mainPlayerPauseBtn.visibility = View.VISIBLE
+            mediaPlayer?.start()
+        } else {
+            binding.mainMiniPlayerStartBtn.visibility = View.VISIBLE
+            binding.mainPlayerPauseBtn.visibility = View.GONE
+            if(mediaPlayer?.isPlaying == true){
+                mediaPlayer?.pause()
+            }
+        }
+    }
 
     // Room Entity에 더미데이터 추가하는 함수
     private fun inputDummySongs() {
         val songDB = SongDatabase.getInstance(this)!!
         val songs = songDB.songDao().getSongs()
 
+        val song1 = SongEntity("Lilac", "아이유 (IU)", 0, 200, false, "music_lilac", false, R.drawable.img_album_exp2, false, 0,)
+        val song2 =  SongEntity("Flu", "아이유 (IU)", 0, 200, false, "music_flu", false, R.drawable.img_album_exp2, false, 1,)
+        val song3 = SongEntity("Butter", "방탄소년단 (BTS)", 0, 190, false, "music_butter", false, R.drawable.img_album_exp, false, 2,)
+        val song4 = SongEntity("Next Level", "에스파 (AESPA)", 0, 210, false, "music_next", false, R.drawable.img_album_exp3, false, 3,)
+        val song5 = SongEntity("Boy with Luv", "방탄소년단 (BTS)", 0, 11, false, "music_boy", false, R.drawable.img_album_exp4, false, 4,)
+        val song6 = SongEntity("BBoom BBoom", "모모랜드 (MOMOLAND)", 0, 240, false, "music_bboom", false, R.drawable.img_album_exp5, false, 5,)
+
         if (songs.isNotEmpty()) return
 
-        songDB.songDao().insert(
-            SongEntity(
-                "Lilac",
-                "아이유 (IU)",
-                0,
-                200,
-                false,
-                "music_lilac",
-                false,
-                R.drawable.img_album_exp2,
-                false,
-                0,
-            )
-        )
-
-        songDB.songDao().insert(
-            SongEntity(
-                "Flu",
-                "아이유 (IU)",
-                0,
-                200,
-                false,
-                "music_flu",
-                false,
-                R.drawable.img_album_exp2,
-                false,
-                1,
-            )
-        )
-
-        songDB.songDao().insert(
-            SongEntity(
-                "Butter",
-                "방탄소년단 (BTS)",
-                0,
-                190,
-                false,
-                "music_butter",
-                false,
-                R.drawable.img_album_exp,
-                false,
-                2,
-            )
-        )
-
-        songDB.songDao().insert(
-            SongEntity(
-                "Next Level",
-                "에스파 (AESPA)",
-                0,
-                210,
-                false,
-                "music_next",
-                false,
-                R.drawable.img_album_exp3,
-                false,
-                3,
-            )
-        )
-
-
-        songDB.songDao().insert(
-            SongEntity(
-                "Boy with Luv",
-                "music_boy",
-                0,
-                230,
-                false,
-                "music_lilac",
-                false,
-                R.drawable.img_album_exp4,
-                false,
-                4,
-            )
-        )
-
-
-        songDB.songDao().insert(
-            SongEntity(
-                "BBoom BBoom",
-                "모모랜드 (MOMOLAND)",
-                0,
-                240,
-                false,
-                "music_bboom",
-                false,
-                R.drawable.img_album_exp5,
-                false,
-                5,
-            )
-        )
+        songDB.songDao().insert(song1)
+        songDB.songDao().insert(song2)
+        songDB.songDao().insert(song3)
+        songDB.songDao().insert(song4)
+        songDB.songDao().insert(song5)
+        songDB.songDao().insert(song6)
 
         val _songs = songDB.songDao().getSongs()
         Log.d("DB data", _songs.toString())
     }
 
+    // Album Entity에 더미데이터 추가하는 함수
     private fun inputDummyAlbums() {
         val songDB = SongDatabase.getInstance(this)!!
         val albums = songDB.albumDao().getAlbums()
@@ -369,6 +395,7 @@ class MainActivity : AppCompatActivity() {
 
         val spf = getSharedPreferences("song", MODE_PRIVATE)
         val songId = spf.getInt("songId", 0)
+        val songSecond = spf.getInt("songSecond", 0) // 저장된 재생 위치 불러오기
 
         val songDB = SongDatabase.getInstance(this)!!
 
@@ -379,7 +406,54 @@ class MainActivity : AppCompatActivity() {
             songDB.songDao().getSong(songId)    // 있으면 songId로 저장된 song 가져옴
         }
 
+        song.second = songSecond // 불러온 재생 위치 설정
         setMiniPlayer(song)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.interrupt()
+        mediaPlayer?.release() // 미디어 플레이어가 갖고 있던 리소스 해제
+        mediaPlayer = null // 미디어 플레이어 해제
+    }
+
+    private fun startTimer() {
+        timer = Timer(songsList[nowPos].playTime, songsList[nowPos].isPlaying)
+        timer.start()
+    }
+
+    inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
+
+        private var second: Int = 0
+        private var mills: Float = 0f
+
+        override fun run() {
+            super.run()
+
+            try {
+                while (true) {
+
+                    if (second >= playTime) {
+                        mediaPlayer?.pause()
+                        break
+                    }
+
+                    if (isPlaying) {
+                        sleep(50)
+                        mills += 50
+
+                        runOnUiThread {
+                            binding.mainSongProgressSb.progress = ((mills / playTime) * 100).toInt()
+                        }
+                        if (mills % 1000 == 0f) {
+                            second++
+                        }
+                    }
+                }
+            } catch (e:InterruptedException) {
+                Log.d("Song", "스레드가 죽었습니다. ${e.message}")
+            }
+        }
     }
 
 }

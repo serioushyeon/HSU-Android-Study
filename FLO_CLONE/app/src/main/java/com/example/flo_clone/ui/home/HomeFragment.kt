@@ -13,10 +13,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.flo_clone.ui.album.AlbumFragment
 import com.example.flo_clone.MainActivity
 import com.example.flo_clone.R
-import com.example.flo_clone.data.AlbumData
 import com.example.flo_clone.databinding.FragmentHomeBinding
-import com.example.flo_clone.room.AlbumEntity
-import com.example.flo_clone.room.SongDatabase
+import com.example.flo_clone.room.entity.AlbumEntity
+import com.example.flo_clone.room.database.SongDatabase
 import com.example.flo_clone.ui.album.AlbumRvAdapter
 import com.example.flo_clone.ui.home.banner.BannerFragment
 import com.example.flo_clone.ui.home.banner.BannerVPAdapter

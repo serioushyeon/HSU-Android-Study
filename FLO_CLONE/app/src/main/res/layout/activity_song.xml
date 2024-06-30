@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.song.SongActivity">
 
     <ImageButton
@@ -64,6 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/singer_title_tv"
         android:layout_width="wrap_content"
@@ -87,15 +89,36 @@
         app:layout_constraintStart_toEndOf="@+id/singer_title_tv"
         app:layout_constraintTop_toBottomOf="@+id/song_title_tv" />
 
-    <ImageView
-        android:id="@+id/album_img_iv"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+    <FrameLayout
+        android:id="@+id/album_img_frame_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:src="@drawable/lilac_album_cover"
+        app:layout_constraintTop_toBottomOf="@+id/singer_title_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singer_title_tv" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/album_img_iv"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/lilac_album_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/singer_title_tv" />
+
+        <ImageButton
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/btn_play_white"
+            android:background="@color/transparent"
+            android:scaleType="centerCrop"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/lyrics_tv1"
@@ -106,7 +129,7 @@
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/album_img_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/album_img_frame_container" />
     <TextView
         android:id="@+id/lyrics_tv2"
         android:layout_width="wrap_content"
