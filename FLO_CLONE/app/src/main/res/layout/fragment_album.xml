@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.album.AlbumFragment">
+    tools:context=".feature.main.album.AlbumFragment">
 
     <ImageButton
         android:id="@+id/btn_album_back_ib"
