@@ -24,12 +24,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.flo_clone.R
 import com.example.flo_clone.databinding.ActivityMainBinding
 import com.example.flo_clone.core.data.model.local.entities.AlbumEntity
-import com.example.flo_clone.feature.home.HomeFragment
-import com.example.flo_clone.feature.locker.LockerFragment
-import com.example.flo_clone.feature.look.LookFragment
-import com.example.flo_clone.feature.search.SearchFragment
 import com.example.flo_clone.core.data.model.local.database.SongDatabase
 import com.example.flo_clone.core.data.model.local.entities.SongEntity
+import com.example.flo_clone.feature.main.home.HomeFragment
+import com.example.flo_clone.feature.main.locker.LockerFragment
+import com.example.flo_clone.feature.main.look.LookFragment
+import com.example.flo_clone.feature.main.search.SearchFragment
 import com.example.flo_clone.feature.song.SongActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -184,25 +184,29 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_home -> { // 홈 프래그먼트가 선택되면 현재 프래그먼트를 홈 프래그먼트로 변경 (이하 동일)
                     supportFragmentManager.beginTransaction().replace(
                         R.id.frame_layout,
-                        HomeFragment()).commit()
+                        HomeFragment()
+                    ).commit()
                     true
                 }
                 R.id.fragment_look -> {
                     supportFragmentManager.beginTransaction().replace(
                         R.id.frame_layout,
-                        LookFragment()).commit()
+                        LookFragment()
+                    ).commit()
                     true
                 }
                 R.id.fragment_serach -> {
                     supportFragmentManager.beginTransaction().replace(
                         R.id.frame_layout,
-                        SearchFragment()).commit()
+                        SearchFragment()
+                    ).commit()
                     true
                 }
                 R.id.fragment_locker -> {
                     supportFragmentManager.beginTransaction().replace(
                         R.id.frame_layout,
-                        LockerFragment()).commit()
+                        LockerFragment()
+                    ).commit()
                     true
                 }
                 else -> false// when 문의 else

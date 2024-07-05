@@ -12,8 +12,8 @@ import com.example.flo_clone.databinding.FragmentAlbumBinding
 import com.example.flo_clone.core.data.model.local.database.SongDatabase
 import com.example.flo_clone.core.data.model.local.entities.AlbumEntity
 import com.example.flo_clone.core.data.model.local.entities.LikeEntity
-import com.example.flo_clone.feature.home.HomeFragment
 import com.example.flo_clone.core.ui.vp.AlbumVPAdapter
+import com.example.flo_clone.feature.main.home.HomeFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 

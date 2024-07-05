@@ -15,10 +15,10 @@ import com.example.flo_clone.R
 import com.example.flo_clone.databinding.FragmentHomeBinding
 import com.example.flo_clone.core.data.model.local.entities.AlbumEntity
 import com.example.flo_clone.core.data.model.local.database.SongDatabase
-import com.example.flo_clone.feature.album.AlbumRvAdapter
-import com.example.flo_clone.feature.home.banner.BannerFragment
-import com.example.flo_clone.feature.home.banner.BannerVPAdapter
-import com.example.flo_clone.feature.home.panel.PanelVPAdapter
+import com.example.flo_clone.core.ui.rv.AlbumRvAdapter
+import com.example.flo_clone.core.ui.vp.BannerVPAdapter
+import com.example.flo_clone.core.ui.vp.PanelVPAdapter
+import com.example.flo_clone.feature.main.home.banner.BannerFragment
 import com.google.gson.Gson
 
 data class SongPractice(val title: String, val singerName: String)

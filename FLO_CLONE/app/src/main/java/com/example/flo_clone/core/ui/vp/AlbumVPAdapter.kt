@@ -2,9 +2,9 @@ package com.example.flo_clone.core.ui.vp
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.flo_clone.feature.album.detail.DetailFragment
-import com.example.flo_clone.feature.album.song.SongFragment
-import com.example.flo_clone.feature.album.video.VideoFragment
+import com.example.flo_clone.feature.main.album.detail.DetailFragment
+import com.example.flo_clone.feature.main.album.song.SongFragment
+import com.example.flo_clone.feature.main.album.video.VideoFragment
 
 class AlbumVPAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3

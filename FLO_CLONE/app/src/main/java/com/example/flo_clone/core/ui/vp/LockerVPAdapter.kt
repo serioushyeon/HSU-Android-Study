@@ -3,8 +3,8 @@ package com.example.flo_clone.core.ui.vp
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.flo.SavedAlbumFragment
-import com.example.flo_clone.feature.locker.musicfile.MusicFileFragment
-import com.example.flo_clone.feature.locker.savedsongs.SavedSongsFragment
+import com.example.flo_clone.feature.main.locker.musicfile.MusicFileFragment
+import com.example.flo_clone.feature.main.locker.savedsongs.SavedSongsFragment
 
 class LockerVPAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3

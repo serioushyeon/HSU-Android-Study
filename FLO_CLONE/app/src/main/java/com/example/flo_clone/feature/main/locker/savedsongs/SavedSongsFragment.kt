@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo_clone.databinding.FragmentSavedSongsBinding
 import com.example.flo_clone.core.data.model.local.database.SongDatabase
 import com.example.flo_clone.core.data.model.local.entities.SongEntity
-import com.example.flo_clone.feature.locker.BottomSheetFragment
+import com.example.flo_clone.feature.main.locker.BottomSheetFragment
 
 class SavedSongsFragment : Fragment() {
 
