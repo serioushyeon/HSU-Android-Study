@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">practice</string>
+    <string name="txt_home">홈</string>
+    <string name="txt_look">둘러보기</string>
+    <string name="txt_search">검색</string>
+    <string name="txt_locker">보관함</string>
+    <string name="kakao_app_key">f89e88b7dd1d7065c0b513679287ce40</string>
+    <string name="kakao_scheme">kakao{f89e88b7dd1d7065c0b513679287ce40}</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
