@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.locker.savedsongs.SavedSongsFragment">
+    tools:context=".feature.locker.savedsongs.SavedSongsFragment">
 
     <LinearLayout
         android:id="@+id/linear_container_saved_songs"

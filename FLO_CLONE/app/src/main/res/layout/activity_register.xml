@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.register.RegisterActivity">
+        tools:context=".feature.register.RegisterActivity">
 
         <TextView
             android:id="@+id/register_logo_tv"
