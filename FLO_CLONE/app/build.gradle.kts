@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.flo_clone"
+    namespace = "com.example.floClone"
     compileSdk = 34
 
     defaultConfig {

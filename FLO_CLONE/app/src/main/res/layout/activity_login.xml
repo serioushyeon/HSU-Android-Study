@@ -11,9 +11,9 @@
     <ImageView
         android:id="@+id/login_flo_logo_iv"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_flo_logo2"
-        android:layout_marginTop="20dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_flo_logo"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
         android:background="@null"
         android:hint="아이디(이메일)"
         android:inputType="text"
