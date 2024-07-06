@@ -55,7 +55,14 @@ class LoginActivity: AppCompatActivity(), LoginView {
 
     private fun setButton() {
         binding.loginHomeBtn.setOnClickListener {
-            startMainActivity()
+            UserApiClient.instance.unlink  { error ->
+                if (error != null) {
+                    Log.e("Hello", "회원 탈퇴 실패. SDK에서 토큰 삭제됨", error)
+                } else {
+                    Log.i("Hello", "회원 탈퇴 성공. SDK에서 토큰 삭제됨")
+                    makeToast("연결 끊기 성공")
+                }
+            }
         }
 
         binding.loginLoginBtn.setOnClickListener {
