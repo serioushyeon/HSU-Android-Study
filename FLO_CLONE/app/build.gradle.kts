@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.flo_clone"
+    namespace = "com.example.floClone"
     compileSdk = 34
 
     defaultConfig {
@@ -91,6 +91,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    implementation(libs.kakao.sdk)
 
 
 }

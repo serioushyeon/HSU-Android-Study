@@ -10,7 +10,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:background="@color/white"
-            tools:context=".ui.look.LookFragment">
+            tools:context=".feature.look.LookFragment">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView"
