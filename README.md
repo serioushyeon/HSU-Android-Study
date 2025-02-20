@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ### UMC HSU 6th Android 스터디 깃허브 사용 규칙
 
 
@@ -40,7 +39,3 @@ DOCS: README 등의 문서 수정
 TEST: 테스트 코드 추가 및 수정
 
 EX) "FEAT: 음악 재생 구현"
-=======
-# udemy_android_template_bottomnavi
-안드로이드 플로 클론 1주차에 필요한 템플릿입니다.
->>>>>>> 97ec23a (회원가입 xml파일 생성)
